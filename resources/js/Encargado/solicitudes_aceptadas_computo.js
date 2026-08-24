@@ -113,7 +113,7 @@ function generarRegistros(informacion){
                             ${r.estado}
                         </span>
 
-                        <button data-id='{{ $reporte->id }}' data-estado='completado'
+                        <button data-id='${r.id}' data-estado='completado'
                             class="completar p-2 bg-[#7B1FA3] text-white rounded-xl hover:bg-[#6A1B8E] transition-all shadow-lg shadow-purple-100 active:scale-[0.98]"
                             title="Guardar cambio">
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

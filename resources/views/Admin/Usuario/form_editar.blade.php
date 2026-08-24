@@ -58,7 +58,7 @@
     <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1" id="label-grupo-edit">Grupo</label>
     <select id="grupo-edit" name="id_grupo" class="w-full px-4 py-2 bg-gray-50 border border-gray-100 rounded-xl text-sm focus:outline-none focus:border-[#7B1FA3]">
         @foreach ($grupos as $grupo)
-            <option value="{{ $grupo->id }}">{{ $grupo->grado }} {{ $grupo->grupo }} {{ $grupo->nombre }} - {{ $grupo->turno }}</option>
+            <option value="{{ $grupo->id }}">{{ $grupo->grado }}°{{ $grupo->grupo }} - {{ $grupo->nombre }} - {{ $grupo->turno }}</option>
         @endforeach
     </select>
 </div>

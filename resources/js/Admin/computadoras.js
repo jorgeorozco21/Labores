@@ -61,6 +61,7 @@ document.addEventListener('click', function(e){
     const cerrarReportes = e.target.closest('.cerrar-modal-reportes');
 
     if (cerrarReportes){
+        contenedorReportes.innerHTML = "";
         bandReportes = false;
         idRep = null;
     }
@@ -68,6 +69,7 @@ document.addEventListener('click', function(e){
     const cerrarAuditoria = e.target.closest('.cerrar-modal-auditoria');
 
     if (cerrarAuditoria){
+        contenedorAuditorias.innerHTML = "";
         bandAuditoria = false;
         idAud = null;
     }

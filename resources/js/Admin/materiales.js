@@ -24,6 +24,7 @@ document.addEventListener('click', (e)=>{
     const cerrarAuditoria = e.target.closest('.cerrar-modal-auditoria');
 
     if (cerrarAuditoria){
+        contenedorAuditorias.innerHTML = "";
         bandAuditoria = false;
         idAud = null;
     }

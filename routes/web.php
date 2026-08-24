@@ -191,7 +191,8 @@ Route::middleware('check.login')->group(function (){
                     "g.id",
                     "g.nombre",
                     "g.grado",
-                    "g.grupo"
+                    "g.grupo",
+                    "g.turno"
                 )
                 ->where("g.id_institucion","=",session("id_institucion"))
                 ->get()
@@ -482,6 +483,32 @@ Route::middleware('check.login')->group(function (){
             ;
 
             return view('Admin.Informes.laboratorios', compact('admin','laboratorios'));
+        });
+
+        Route::get('/admin/informes/laboratorios/buscador', function (Illuminate\Http\Request $request){
+            $query = 
+                DB::table("laboratorios as l")
+                ->select(
+                    "l.id",
+                    "l.nombre",
+                    "l.tipo"
+                )
+                ->where("l.nombre","ilike","%".$request->texto."%")
+                ->orderBy('l.tipo', 'asc')
+                ->orderBy('l.nombre', 'asc')
+            ;
+
+            if ($request->tipo != "Sin Filtro"){
+                $query->where("l.tipo","=",$request->tipo);
+            }
+
+            $query->where("l.id_institucion","=",session("id_institucion"));
+
+            $query->orderBy('l.tipo', 'asc')->orderBy('l.nombre', 'asc');
+
+            $laboratorios = $query->get();
+
+            return response()->json($laboratorios);
         });
 
         Route::get('/admin/reportes/exportar-reportes-computo-{id}',[ComputadoraController::class, 'exportarComputadoras']);

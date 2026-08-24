@@ -26,10 +26,11 @@ contenedorSolicitudes.addEventListener('click', function(e) {
     if (btnRechazar) {
         const id = btnRechazar.dataset.id;
         const idLab = btnRechazar.dataset.idlaboratorio;
+        const idUsuario = btnRechazar.dataset.idusuario;
         const fecha = btnRechazar.dataset.fecha;
         
         if (confirm("¿Deseas rechazar la solicitud?")) {
-            rechazarSolicitud(id, idLab, fecha);
+            rechazarSolicitud(id, idLab, idUsuario, fecha);
             buscador.value = '';
             filtro.selectedIndex = 0;
             buscadorGeneral();
@@ -37,10 +38,10 @@ contenedorSolicitudes.addEventListener('click', function(e) {
     }
 });
 
-async function rechazarSolicitud(id, idLaboratorio, fecha){
+async function rechazarSolicitud(id, idLaboratorio, idUsuario, fecha){
     const datos = {
         'id_solicitud': id,
-        'id_usuario': usuario.id,
+        'id_usuario': idUsuario,
         'id_laboratorio': idLaboratorio,
         'fecha': fecha
     };
@@ -164,7 +165,7 @@ function generarRegistro(informacion){
                         </button>
 
                         <!-- Rechazar Solicitud -->
-                        <button data-id="${s.id}" class="rechazada flex items-center gap-1 px-3 py-1.5 rounded-lg bg-red-50 text-red-600 hover:bg-red-600 hover:text-white transition-all text-xs font-bold">
+                        <button data-id="${s.id}" data-idlaboratorio="${infoUsuario.idLaboratorio}" data-idusuario="${infoUsuario.id}" data-fecha="${s.fecha}" class="rechazada flex items-center gap-1 px-3 py-1.5 rounded-lg bg-red-50 text-red-600 hover:bg-red-600 hover:text-white transition-all text-xs font-bold">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                             Rechazar
                         </button>

@@ -5,7 +5,7 @@ const buscador = document.getElementById("buscador");
 const filtroTipo = document.getElementById("filtrar-tipo");
 
 async function buscadorGeneral(){
-    const response = await fetch(`/api/laboratorios?texto=${buscador.value}&tipo=${filtroTipo.value}`);
+    const response = await fetch(`/admin/informes/laboratorios/buscador?texto=${buscador.value}&tipo=${filtroTipo.value}`);
     const data = await response.json();
     
     contenedorInformacion.innerHTML = generarRegistro(data);
@@ -28,7 +28,7 @@ function generarRegistro(data){
 
     let fila = '';
 
-    //console.log(data);
+    console.log(data);
 
     data.forEach(laboratorio =>{
         fila += `

@@ -7,13 +7,13 @@ document.addEventListener("DOMContentLoaded", ()=>{
     if (alerta1) {
         setTimeout(()=>{
             alerta1.style.display = "none";
-        },4000);
+        },3000);
     }
 
     if (alerta2) {
         setTimeout(()=>{
             alerta2.style.display = "none";
-        },6000);
+        },3000);
     }
 });
 

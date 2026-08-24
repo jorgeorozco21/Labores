@@ -83,6 +83,7 @@ crear.addEventListener("click", function(){
         idCom = null;
         buscador.value = '';
         buscadorGeneral();
+        obtenerReportes();
     }
 });
 

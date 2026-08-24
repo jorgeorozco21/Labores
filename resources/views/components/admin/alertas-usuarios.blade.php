@@ -40,6 +40,6 @@
             alerta.style.opacity = '0';
             alerta.style.transform = 'translateY(-10px)';
             setTimeout(() => alerta.remove(), 500);
-        }, 10000);
+        }, 3000);
     });
 </script>

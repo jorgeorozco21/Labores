@@ -30,13 +30,15 @@ document.addEventListener('click', function(e){
         let tipo = e.target.dataset.tipo;
         let cantidadDisponible = e.target.dataset.cantidaddisponible;
 
-        materiales[id] = {
-            'id': id,
-            'nombre': nombreMaterial,
-            'tipo': tipo,
-            'cantidad': 1,
-            'cantidad_maxima': cantidadDisponible
-        };
+        if (!(id in materiales)){
+            materiales[id] = {
+                'id': id,
+                'nombre': nombreMaterial,
+                'tipo': tipo,
+                'cantidad': 1,
+                'cantidad_maxima': cantidadDisponible
+            };
+        }
 
         generarTarjeta(materiales);
 

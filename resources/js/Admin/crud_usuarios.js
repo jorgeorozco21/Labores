@@ -76,7 +76,7 @@ function asignarInformacionFormularioEditar(informacion){
         // Creacion de opciones para el formulario de editar el grupo
         for (const grupo of informacion.grupos){
             opciones += `
-                <option value="${grupo.id}" ${ (informacion.usuario.id_grupo == grupo.id)?"selected":"" }>${grupo.grado} ${grupo.grupo} ${grupo.nombre}</option>
+                <option value="${grupo.id}" ${ (informacion.usuario.id_grupo == grupo.id)?"selected":"" }>${grupo.grado} ${grupo.grupo} - ${grupo.nombre} - ${grupo.turno}</option>
             `;
         }
 

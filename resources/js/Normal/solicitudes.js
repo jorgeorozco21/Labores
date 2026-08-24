@@ -156,7 +156,7 @@ function generarTarjetasSolicitudes(informacion){
 
     informacion.solicitudes_eliminadas.forEach(s =>{
         tarjetas += `
-            <div data-id="${solicitud.id}" class="solicitud-eliminada bg-white p-6 rounded-[20px] border border-gray-100 shadow-sm flex w-full hover:shadow-md hover:border-2 transition-shadow cursor-pointer">
+            <div data-id="${s.id}" class="solicitud-eliminada bg-white p-6 rounded-[20px] border border-gray-100 shadow-sm flex w-full hover:shadow-md hover:border-2 transition-shadow cursor-pointer">
                 <div class="space-y-2 w-full">
                     <div class="flex justify-between w-full">
                         <h2 class="text-lg font-extrabold text-[#1e293b] tracking-tight">
@@ -167,11 +167,11 @@ function generarTarjetasSolicitudes(informacion){
                         <div>
                             <!-- ID de la Solicitud -->
                             <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">
-                                <span class="text-gray-600">ID:</span> ${solicitud.id_solicitud}
+                                <span class="text-gray-600">ID:</span> ${s.id_solicitud}
                             </p>
                             <!-- Fecha de la Solicitud -->
                             <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">
-                                <span class="text-gray-600">Fecha:</span> ${solicitud.fecha}
+                                <span class="text-gray-600">Fecha:</span> ${s.fecha}
                             </p>
                         </div>
                         <div>

@@ -144,7 +144,7 @@ function generarRegistro(informacion){
         if (r.estado != 'aceptada' && r.estado != 'reprogramado'){
             reportes += `
                     <div class="flex justify-center">
-                        <button data-id="${r.id_computadora}" class="reportar flex items-center gap-1 px-3 py-1.5 rounded-lg bg-red-50 text-red-600 hover:bg-red-600 hover:text-white transition-all text-xs font-bold">
+                        <button data-idsolicitud="${r.id}" data-id="${r.id_computadora}" class="reportar flex items-center gap-1 px-3 py-1.5 rounded-lg bg-red-50 text-red-600 hover:bg-red-600 hover:text-white transition-all text-xs font-bold">
                             Reportar
                         </button>
                     </div>
