@@ -53,7 +53,7 @@
                         <!-- Estado del Reporte -->
                         <td class="px-6 py-4 text-center">
                             <div class="flex justify-center">
-                                <span class="px-2 py-1 bg-green-50 text-green-600 text-[10px] font-bold rounded-lg border border-green-100 uppercase">
+                                <span class="px-3 py-1 bg-green-50 text-green-600 text-[10px] font-bold rounded-lg border border-green-100 uppercase">
                                     {{ ($reporte->estado == null)?'espera':$reporte->estado }}
                                 </span>
                             </div>

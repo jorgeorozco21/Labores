@@ -119,7 +119,7 @@ function generarRegistro(informacion){
                 <!-- Estado del Reporte -->
                 <td class="px-6 py-4 text-center">
                     <div class="flex justify-center">
-                        <span class="px-2 py-1 bg-green-50 text-green-700 text-xs font-bold rounded-lg border border-green-100 uppercase">
+                        <span class="px-3 py-1 bg-green-50 text-green-600 text-[10px] font-bold rounded-lg border border-green-100 uppercase">
                             ${ (r.estado == null)?'espera':r.estado}
                         </span>
                     </div>
@@ -127,12 +127,12 @@ function generarRegistro(informacion){
 
                 <td class="px-6 py-4 text-center">
                     <div class="flex justify-center">
-                        <span class="px-2 py-1 bg-orange-50 text-orange-700 text-xs font-bold rounded-lg border border-orange-100 uppercase">
+                        <span class="px-3 py-1 bg-orange-50 text-orange-600 text-[10px] font-bold rounded-lg border border-orange-100 uppercase">
                             ${ (r.estado == null || r.estado == 'reprogramado')?'en proceso':'reparado' }
                         </span>
 
                         <button data-estado="${ (r.estado == null || r.estado == 'reprogramado')?'en proceso':'reparado' }" data-id="${r.id}"
-                            class="cambiar p-2 bg-[#7B1FA3] text-white rounded-xl hover:bg-[#6A1B8E] transition-all shadow-lg shadow-purple-100 active:scale-[0.98]"
+                            class="cambiar px-3 py-1 bg-[#7B1FA3] text-white rounded-xl hover:bg-[#6A1B8E] transition-all shadow-lg shadow-purple-100 active:scale-[0.98] ml-2"
                             title="Guardar cambio">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                         </button>
@@ -145,7 +145,7 @@ function generarRegistro(informacion){
         if (r.estado == 'en proceso'){
             reportes += `
                 <div class="flex justify-center">
-                    <button data-id="${r.id}" data-estado="sin reparacion" data-inventario="${r.id_inventario}" data-cantidad="${r.cantidad}" class="reportar flex items-center gap-1 px-3 py-1.5 rounded-lg bg-red-50 text-red-600 hover:bg-red-600 hover:text-white transition-all text-xs font-bold">
+                    <button data-id="${r.id}" data-estado="sin reparacion" data-inventario="${r.id_inventario}" data-cantidad="${r.cantidad}" class="reportar flex items-center gap-1 px-3 py-1 rounded-lg bg-red-50 text-red-600 hover:bg-red-600 hover:text-white transition-all text-xs font-bold">
                         Sin Reparacion
                     </button>
                 </div>

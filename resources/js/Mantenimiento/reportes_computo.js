@@ -84,7 +84,7 @@ function generarRegistro(informacion){
 
         reportes += `
             <tr class="hover:bg-gray-50/50 transition-colors group">
-                <td class="px-6 py-4">
+                <td class="px-6 py-4 text-sm text-black text-center font-medium">
                     ${r.numero_computadora}
                 </td>
 
@@ -101,8 +101,8 @@ function generarRegistro(informacion){
                 <td class="px-6 py-4 justify-center">
                     <div class="flex justify-center">
                         <button type="button" onclick="openMaterialModal('${r.id}', '${r.descripcion}')" 
-                            class="flex items-center gap-2 text-[#7B1FA3]" title="Ver Reporte">
-                            <div class="p-1.5 bg-purple-100 rounded-lg">
+                            class="flex items-center gap-2 text-[#7B1FA3] hover:text-white" title="Ver Reporte">
+                            <div class="p-1.5 bg-purple-100 hover:bg-[#7B1FA3] rounded-lg">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
                                 </svg>
@@ -119,7 +119,7 @@ function generarRegistro(informacion){
                 <!-- Estado del Reporte -->
                 <td class="px-6 py-4 text-center">
                     <div class="flex justify-center">
-                        <span class="px-2 py-1 bg-green-50 text-green-700 text-xs font-bold rounded-lg border border-green-100 uppercase">
+                        <span class="px-3 py-1 bg-green-50 text-green-600 text-[10px] font-bold rounded-lg border border-green-100 uppercase">
                             ${r.estado}
                         </span>
                     </div>
@@ -127,12 +127,12 @@ function generarRegistro(informacion){
 
                 <td class="px-6 py-4 text-center">
                     <div class="flex justify-center">
-                        <span class="px-2 py-1 bg-orange-50 text-orange-700 text-xs font-bold rounded-lg border border-orange-100 uppercase">
+                        <span class="px-3 py-1 bg-orange-50 text-orange-600 text-[10px] font-bold rounded-lg border border-orange-100 uppercase">
                             ${ (r.estado == 'aceptada' || r.estado == 'reprogramado')?'en proceso':'reparado' }
                         </span>
 
                         <button data-estado="${ (r.estado == 'aceptada' || r.estado == 'reprogramado')?'en proceso':'reparado' }" data-id="${r.id}"
-                            class="cambiar p-2 bg-[#7B1FA3] text-white rounded-xl hover:bg-[#6A1B8E] transition-all shadow-lg shadow-purple-100 active:scale-[0.98]"
+                            class="cambiar px-3 py-1 bg-[#7B1FA3] text-white rounded-xl hover:bg-[#6A1B8E] transition-all shadow-lg shadow-purple-100 active:scale-[0.98] ml-2"
                             title="Guardar cambio">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                         </button>

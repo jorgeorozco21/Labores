@@ -36,7 +36,7 @@
                         <td class="px-6 py-4 justify-center">
                             <div class="flex justify-center">
                                 <button type="button" onclick="openMaterialModal('{{ $reporte->id }}', '{{ $reporte->descripcion }}')" 
-                                    class="flex items-center gap-2 text-[#7B1FA3] hover:text-white"title="Ver Reporte">
+                                    class="flex items-center gap-2 text-[#7B1FA3] hover:text-white" title="Ver Reporte">
                                     <div class="p-1.5 bg-purple-100 hover:bg-[#7B1FA3] rounded-lg">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
