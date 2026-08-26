@@ -96,9 +96,11 @@ function generarRegistros(informacion){
         if (r.estado == 'aceptada' || r.estado == 'en proceso' || r.estado == 'reprogramado'){
             registros += `
                     <td class="px-6 py-4 text-center">
-                        <span class="px-3 py-1 text-[10px] bg-orange-50 text-orange-600 font-bold rounded-lg border border-orange-100 uppercase">
-                            ${r.estado}
-                        </span>
+                        <div class="flex justify-center">
+                            <span class="px-3 py-1 text-[10px] bg-orange-50 text-orange-600 font-bold rounded-lg border border-orange-100 uppercase">
+                                ${r.estado}
+                            </span>
+                        </div>
                     </td>
                     <td>
                     </td>
