@@ -1,6 +1,6 @@
 @props(['admin'])
 
-<aside id="sidebar" class="fixed md:relative inset-y-0 left-0 z-50 w-64 bg-white h-dvh flex flex-col border-r border-gray-100 transition-all duration-300 transform -translate-x-full md:translate-x-0">
+<aside id="sidebar" class="fixed md:relative inset-y-0 left-0 z-50 w-64 bg-white h-dvh flex flex-col border-r border-gray-100 transform sidebar-no-transition">
     <button id="toggle-collapse" class="hidden md:flex absolute top-1/2 -right-4 -translate-y-1/2 z-50 items-center justify-center w-8 h-8 rounded-full bg-white border border-gray-200 shadow-md hover:bg-[#7B1FA3] hover:text-white transition-all duration-300">
         <svg id="icono-flecha" class="w-5 h-5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
@@ -114,15 +114,26 @@
     </div>
 </aside>
 
+<style>
+    .sidebar-no-transition,
+    .sidebar-no-transition * {
+        transition: none !important;
+    }
+
+    .sidebar-ready {
+        transition: width 0ms ease, transform 0ms ease;
+    }
+</style>
+
 <script>
-document.addEventListener('DOMContentLoaded', function () {
+(function () {
+
     const aside = document.getElementById('sidebar');
     const overlay = document.getElementById('sidebar-overlay');
     const btnAbrir = document.getElementById('abrir-sidebar');
     const btnCerrar = document.getElementById('cerrar-sidebar');
 
     const toggleCollapse = document.getElementById('toggle-collapse');
-    const iconoFlecha = document.getElementById('icono-fleflow');
 
     const infoUsuario = document.getElementById('info-usuario');
     const logoutSidebar = document.getElementById('logout-sidebar');
@@ -133,22 +144,39 @@ document.addEventListener('DOMContentLoaded', function () {
     const logoGrande = document.getElementById('logo-grande');
     const logoPequeno = document.getElementById('logo-pequeno');
 
+    let colapsado = localStorage.getItem('sidebarColapsado') === 'true';
+
     function abrirSidebar() {
         aside.classList.remove('-translate-x-full');
-        if (overlay) overlay.classList.remove('hidden');
-        if (btnAbrir) btnAbrir.classList.add('opacity-0', 'pointer-events-none');
+
+        if (overlay) {
+            overlay.classList.remove('hidden');
+        }
+
+        if (btnAbrir) {
+            btnAbrir.classList.add('opacity-0', 'pointer-events-none');
+        }
+
         document.body.classList.add('overflow-hidden');
     }
 
     function cerrarSidebar() {
         aside.classList.add('-translate-x-full');
-        if (overlay) overlay.classList.add('hidden');
-        if (btnAbrir) btnAbrir.classList.remove('opacity-0', 'pointer-events-none');
+
+        if (overlay) {
+            overlay.classList.add('hidden');
+        }
+
+        if (btnAbrir) {
+            btnAbrir.classList.remove('opacity-0', 'pointer-events-none');
+        }
+
         document.body.classList.remove('overflow-hidden');
     }
 
     function toggleSidebar() {
         const oculto = aside.classList.contains('-translate-x-full');
+
         if (oculto) {
             abrirSidebar();
         } else {
@@ -156,34 +184,55 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    if (btnAbrir) btnAbrir.addEventListener('click', toggleSidebar);
-    if (btnCerrar) btnCerrar.addEventListener('click', cerrarSidebar);
-    if (overlay) overlay.addEventListener('click', cerrarSidebar);
+    if (btnAbrir) {
+        btnAbrir.addEventListener('click', toggleSidebar);
+    }
 
-    let colapsado = false;
+    if (btnCerrar) {
+        btnCerrar.addEventListener('click', cerrarSidebar);
+    }
 
-    function colapsarSidebar() {
+    if (overlay) {
+        overlay.addEventListener('click', cerrarSidebar);
+    }
+
+    function colapsarSidebar(guardar = true) {
         aside.classList.remove('w-64');
         aside.classList.add('w-20');
 
-        textos.forEach(texto => texto.classList.add('hidden'));
+        textos.forEach(texto => {
+            texto.classList.add('hidden');
+        });
 
         document.querySelectorAll('nav a').forEach(link => {
             link.classList.add('justify-center');
         });
 
-        if (infoUsuario) infoUsuario.classList.add('hidden');
-        if (logoutSidebar) logoutSidebar.classList.remove('border-l', 'pl-2');
-        
-        const iconoFlechaInterno = document.getElementById('icono-flecha');
-        if (iconoFlechaInterno) iconoFlechaInterno.classList.add('rotate-180');
-        
+        if (infoUsuario) {
+            infoUsuario.classList.add('hidden');
+        }
+
+        if (logoutSidebar) {
+            logoutSidebar.classList.remove('border-l', 'pl-2');
+        }
+
+        const iconoFlecha = document.getElementById('icono-flecha');
+
+        if (iconoFlecha) {
+            iconoFlecha.classList.add('rotate-180');
+        }
+
         colapsado = true;
+
+        if (guardar) {
+            localStorage.setItem('sidebarColapsado', 'true');
+        }
 
         if (logoGrande) {
             logoGrande.classList.remove('opacity-100', 'scale-100');
             logoGrande.classList.add('opacity-0', 'scale-75');
         }
+
         if (logoPequeno) {
             logoPequeno.classList.remove('opacity-0', 'scale-75');
             logoPequeno.classList.add('opacity-100', 'scale-100');
@@ -191,67 +240,122 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (perfilSidebar) {
             perfilSidebar.classList.remove('flex-row', 'justify-between');
-            perfilSidebar.classList.add('flex-col', 'justify-center', 'gap-2');
+            perfilSidebar.classList.add(
+                'flex-col',
+                'justify-center',
+                'gap-2'
+            );
         }
     }
 
-    function expandirSidebar() {
+    function expandirSidebar(guardar = true) {
         aside.classList.remove('w-20');
         aside.classList.add('w-64');
 
-        textos.forEach(texto => texto.classList.remove('hidden'));
+        textos.forEach(texto => {
+            texto.classList.remove('hidden');
+        });
 
         document.querySelectorAll('nav a').forEach(link => {
             link.classList.remove('justify-center');
         });
 
-        if (infoUsuario) infoUsuario.classList.remove('hidden');
-        if (logoutSidebar) logoutSidebar.classList.add('border-l', 'pl-2');
-        
-        const iconoFlechaInterno = document.getElementById('icono-flecha');
-        if (iconoFlechaInterno) iconoFlechaInterno.classList.remove('rotate-180');
-        
+        if (infoUsuario) {
+            infoUsuario.classList.remove('hidden');
+        }
+
+        if (logoutSidebar) {
+            logoutSidebar.classList.add('border-l', 'pl-2');
+        }
+
+        const iconoFlecha = document.getElementById('icono-flecha');
+
+        if (iconoFlecha) {
+            iconoFlecha.classList.remove('rotate-180');
+        }
+
         colapsado = false;
+
+        if (guardar) {
+            localStorage.setItem('sidebarColapsado', 'false');
+        }
 
         if (logoGrande) {
             logoGrande.classList.remove('opacity-0', 'scale-75');
             logoGrande.classList.add('opacity-100', 'scale-100');
         }
+
         if (logoPequeno) {
             logoPequeno.classList.remove('opacity-100', 'scale-100');
             logoPequeno.classList.add('opacity-0', 'scale-75');
         }
 
         if (perfilSidebar) {
-            perfilSidebar.classList.remove('flex-col', 'justify-center', 'gap-2');
-            perfilSidebar.classList.add('flex-row', 'justify-between');
+            perfilSidebar.classList.remove(
+                'flex-col',
+                'justify-center',
+                'gap-2'
+            );
+
+            perfilSidebar.classList.add(
+                'flex-row',
+                'justify-between'
+            );
         }
     }
 
     if (toggleCollapse) {
         toggleCollapse.addEventListener('click', () => {
-            if (window.innerWidth < 768) return;
+
+            if (window.innerWidth < 768) {
+                return;
+            }
+
             if (colapsado) {
-                expandirSidebar();
+                expandirSidebar(true);
             } else {
-                colapsarSidebar();
+                colapsarSidebar(true);
             }
         });
+
     }
 
     function manejarResize() {
+
         if (window.innerWidth < 768) {
+
             aside.classList.remove('w-20');
             aside.classList.add('w-64');
-            expandirSidebar();
+
             cerrarSidebar();
+
         } else {
             aside.classList.remove('-translate-x-full');
-            if (overlay) overlay.classList.add('hidden');
+
+            if (overlay) {
+                overlay.classList.add('hidden');
+            }
+
             document.body.classList.remove('overflow-hidden');
+
+            if (colapsado) {
+                colapsarSidebar(false);
+            } else {
+                expandirSidebar(false);
+            }
         }
     }
-    window.addEventListener('resize', manejarResize);
+
+    // Desactivar temporalmente las transiciones
+    aside.classList.add('sidebar-no-transition');
+
     manejarResize();
-});
+
+    requestAnimationFrame(() => {
+        aside.classList.remove('sidebar-no-transition');
+        aside.classList.add('sidebar-ready');
+    });
+
+    window.addEventListener('resize', manejarResize);
+})();
 </script>
