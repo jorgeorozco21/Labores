@@ -36,4 +36,10 @@ class Institucion extends Model
     public function materiales(){
         return $this->hasMany(Material::class, "id_institucion");
     }
+
+    public function configuracionAvanzada(){
+        return $this->hasOne(ConfiguracionAvanzada::class, 'id_institucion');
+    }
+
+    
 }

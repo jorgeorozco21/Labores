@@ -19,6 +19,7 @@ use App\Http\Controllers\ReporteMaterialController;
 use App\Http\Controllers\SolicitudEliminadaController;
 use App\Http\Controllers\SolicitudesComputoController;
 use App\Http\Controllers\SolicitudesController;
+use App\Http\Controllers\ConfiguracionAvanzadaController;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
@@ -873,6 +874,34 @@ Route::middleware('check.login')->group(function (){
             session()->flash('success', 'Registros eliminados correctamente.');
             return response()->json(['success' => true]);
         });
+
+        Route::get('/admin/configuracion-avanzada', function (){
+            $configuracion = 
+                DB::table("configuracion_avanzada as ca")
+                ->select(
+                    'ca.id',
+                    'ca.limite_solicitudes_prestamos',
+                    'ca.limite_solicitudes_computo',
+                    'ca.limite_bloqueo'
+                )
+                ->where('ca.id_institucion','=',session('id_institucion'))
+                ->first()
+            ;
+
+            $admin =
+                DB::table('usuarios as u')
+                ->select(
+                    'u.nombre_usuario',
+                    'u.email'
+                )
+                ->where('u.id','=',session('id_usuario'))
+                ->first() 
+            ;
+
+            return view('Admin.Configuracion_Avanzada.index', compact('configuracion','admin'));
+        })->name('admin.configuracionAvanzada.index');
+
+        Route::put('/admin/configuracion-avanzada/actualizar-{id}', [ConfiguracionAvanzadaController::class, 'update']);
     });
 
     Route::middleware(['tipo:normal'])->group(function (){
