@@ -5,6 +5,9 @@ import { buscadorGeneral } from "./buscador_computadora";
 const contenedorReportes = document.getElementById('contenedor-reportes');
 const crear = document.getElementById('enviar');
 const buscador = document.getElementById('buscador');
+const idLaboratorio = document.getElementById('id-laboratorio').value;
+const limiteSolicitudes = parseInt(document.getElementById('limite-solicitudes').value);
+let cantidadSolcitudes = parseInt(document.getElementById('cantidad-solicitudes').value);
 let numeroComputadora;
 let idCom;
 let band = false;
@@ -73,6 +76,11 @@ crear.addEventListener("click", function(){
         return;
     }
 
+    if (cantidadSolcitudes + 1 > limiteSolicitudes){
+        alert('Has alcanzado el limite de reportes permitidos');
+        return;
+    }
+
     if (confirm('Deseas realizar el reporte ??')){
         crearSolicitud();
         document.getElementById('tipo').selectedIndex = 0;
@@ -83,7 +91,6 @@ crear.addEventListener("click", function(){
         idCom = null;
         buscador.value = '';
         buscadorGeneral();
-        obtenerReportes();
     }
 });
 
@@ -91,7 +98,8 @@ async function crearSolicitud(){
     const datos = {
         'id_computadora': idCom,
         'tipo': document.getElementById('tipo').value,
-        'descripcion': document.getElementById('descripcion-reporte').value.trim()
+        'descripcion': document.getElementById('descripcion-reporte').value.trim(),
+        'id_laboratorio': idLaboratorio
     };
 
     try{
@@ -108,7 +116,8 @@ async function crearSolicitud(){
 
         if (respuesta.ok){
             alert("¡Reporte realizado con éxito!");
-            
+            cantidadSolcitudes = parseInt(resultado);
+            document.getElementById('cantidad-solicitudes').value = cantidadSolcitudes;
         }else{
             alert(resultado.error);
         }

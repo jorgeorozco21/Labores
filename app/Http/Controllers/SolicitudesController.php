@@ -54,7 +54,25 @@ class SolicitudesController extends Controller
 
         Solicitud::create($infoSolicitud);
 
-        return response()->json('Todo bien');
+        $solicitudes = 
+            DB::table('solicitudes as s')
+            ->leftJoin('auditoria as a', function($join) {
+                $join->on('s.id', '=', 'a.id_solicitud')
+                    ->whereRaw('a.id = (SELECT MAX(id) FROM auditoria WHERE id_solicitud = s.id)');
+            })
+            ->select(
+                's.id',
+            )
+            ->where(function($query) {
+                $query->where('a.estado', '!=', 'recibido')
+                    ->orWhereNull('a.estado');  
+            })
+            ->where('s.info_usuario->idLaboratorio','=',$infoSolicitud['info_usuario']['idLaboratorio'])
+            ->where('s.info_usuario->id','=',session('id_usuario'))
+            ->get()
+        ;
+
+        return response()->json($solicitudes->count());
     }
 
     /**

@@ -19,6 +19,8 @@ const usuario = {
     'idLaboratorio': idLaboratorio,
     'nombreLaboratorio': document.getElementById('nombreLaboratorio').value
 };
+const limiteSolicitudes = parseInt(document.getElementById('limite-solicitudes').value);
+let cantidadSolicitudes = parseInt(document.getElementById('cantidad-solicitudes').value);
 
 document.addEventListener('click', function(e){
     if (e.target.closest(".tarjeta-material")){
@@ -124,6 +126,11 @@ botonEnviar.addEventListener("click", (e)=>{
 
     if (Object.keys(materiales).length == 0) alert('No puedes realizar una solicitud vacia');
     else{
+        if (cantidadSolicitudes + 1 > limiteSolicitudes){
+            alert('Alcanzaste el limite de solicitudes permitidas por usuario en este laboratorio.')
+            return;
+        }
+
         const confirmar =  confirm("Deseas hacer la solicitud ??");
 
         if (confirmar){
@@ -171,9 +178,10 @@ async function crearSolicitud(info){
         const resultado = await respuesta.json();
 
         if (respuesta.ok){
-
             alert("¡Solicitud guardada con éxito!");
             
+            cantidadSolicitudes = parseInt(resultado);
+            document.getElementById('cantidad-solicitudes').value = cantidadSolicitudes;
         }else{
             alert(resultado.error);
         }

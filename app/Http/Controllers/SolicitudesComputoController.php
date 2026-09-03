@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\SolicitudComputo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class SolicitudesComputoController extends Controller
 {
@@ -28,11 +29,35 @@ class SolicitudesComputoController extends Controller
      */
     public function store(Request $request)
     {
-        $datos = $request->except('_token','_method');
+        $datos = $request->except('_token','_method','id_laboratorio');
 
         SolicitudComputo::create($datos);
 
-        return response()->json('Todo bien');
+        $infoLaboratorio = 
+            DB::table('computadoras as c')
+            ->leftJoin('solicitudes_computo as s', function($join) {
+                $join->on('s.id_computadora', '=', 'c.id')
+                    ->whereNotExists(function ($query) {
+                        $query->select(DB::raw(1))
+                            ->from('auditoria_computo as a')
+                            ->whereColumn('a.id_solicitud', 's.id')
+                            ->where('a.estado', '=', 'completado');
+                    });
+            })
+            ->select(
+                DB::raw('COUNT(s.id) as cantidad_reportes')
+            )
+            ->where('c.estado','=','activo')
+            ->where('c.id_laboratorio', '=', $request->id_laboratorio)
+            ->where('c.estado', '=', 'activo')
+            ->groupBy('c.id', 'c.numero_computadora')
+            ->orderBy('c.id','ASC')
+            ->get()
+        ;
+
+        $totalReportes = $infoLaboratorio->sum('cantidad_reportes');
+
+        return response()->json($totalReportes);
     }
 
     /**

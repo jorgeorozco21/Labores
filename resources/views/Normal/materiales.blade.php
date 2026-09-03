@@ -51,6 +51,8 @@
 <input type="hidden" id="grupo" value="{{ $usuario->grupo }}">
 <input type="hidden" id="nombreGrupo" value="{{ $usuario->nombreGrupo }}">
 <input type="hidden" id="turno" value="{{ $usuario->turno }}">
+<input type="hidden" id="cantidad-solicitudes" value="{{ $solicitudes->count() }}">
+<input type="hidden" id="limite-solicitudes" value="{{ $configuracion->limite_solicitudes_prestamos }}">
 
 @vite(['resources/js/Normal/buscador_materiales.js','resources/js/Normal/creacion_solicitudes.js'])
 </html>

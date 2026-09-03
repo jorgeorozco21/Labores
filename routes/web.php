@@ -973,8 +973,37 @@ Route::middleware('check.login')->group(function (){
                 ->where('u.id','=',session("id_usuario"))
                 ->first()
             ;
-        
-            return view('Normal.materiales',compact('laboratorio','materiales','usuario'));
+
+            $solicitudes = 
+                DB::table('solicitudes as s')
+                ->leftJoin('auditoria as a', function($join) {
+                    $join->on('s.id', '=', 'a.id_solicitud')
+                        ->whereRaw('a.id = (SELECT MAX(id) FROM auditoria WHERE id_solicitud = s.id)');
+                })
+                ->select(
+                    's.id',
+                    's.created_at as fecha',
+                    'a.estado'
+                )
+                ->where(function($query) {
+                    $query->where('a.estado', '!=', 'recibido')
+                        ->orWhereNull('a.estado');  
+                })
+                ->where('s.info_usuario->idLaboratorio','=',$id)
+                ->where('s.info_usuario->id','=',session('id_usuario'))
+                ->get()
+            ;
+
+            $configuracion = 
+                DB::table("configuracion_avanzada as ca")
+                ->select(
+                    "ca.limite_solicitudes_prestamos"
+                )
+                ->where('ca.id_institucion','=',session('id_institucion'))
+                ->first()
+            ;
+
+            return view('Normal.materiales',compact('laboratorio','materiales','usuario','solicitudes','configuracion'));
         })->name('materiales');
         
         Route::get('/usuario/normal/materiales', function (Illuminate\Http\Request $request){
@@ -1141,8 +1170,19 @@ Route::middleware('check.login')->group(function (){
             ->groupBy('c.id', 'c.numero_computadora')
             ->orderBy('c.id','ASC')
             ->get();
+
+            $totalReportes = $infoLaboratorio->sum('cantidad_reportes');
+
+            $configuracion = 
+                DB::table("configuracion_avanzada as ca")
+                ->select(
+                    "ca.limite_solicitudes_computo"
+                )
+                ->where('ca.id_institucion','=',session('id_institucion'))
+                ->first()
+            ;
         
-            return view('Normal.solicitudes-computo', compact('infoLaboratorio','laboratorio'));
+            return view('Normal.solicitudes-computo', compact('infoLaboratorio','laboratorio','totalReportes','configuracion'));
         })->name('solicitudes-computo');
         
         Route::get('/api/usuario/normal/laboratorios/buscador-computadora', function (Illuminate\Http\Request $request){

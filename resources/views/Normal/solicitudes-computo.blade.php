@@ -42,6 +42,8 @@
     </main>
 
     <input type="hidden" id="id-laboratorio" value="{{ $laboratorio->id }}">
+    <input type="hidden" id="cantidad-solicitudes" value="{{ $totalReportes }}">
+    <input type="hidden" id="limite-solicitudes" value="{{ $configuracion->limite_solicitudes_computo }}">
 
     @vite(['resources/js/Normal/buscador_computadora.js','resources/js/Normal/creacion_solicitudes_computo.js'])
 </body>
