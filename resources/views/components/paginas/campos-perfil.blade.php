@@ -12,67 +12,69 @@
         </div>
     </div>
 
-    <!-- Sección 1: Datos Personales -->
-    <div class="mb-6">
-        <h2 class="text-sm font-bold text-[#7B1FA3] uppercase tracking-wider mb-4 flex items-center gap-2">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-            Información de la Cuenta
-        </h2>
+    @if (session('tipo') != "labores")
+        <!-- Sección 1: Datos Personales -->
+        <div class="mb-6">
+            <h2 class="text-sm font-bold text-[#7B1FA3] uppercase tracking-wider mb-4 flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                Información de la Cuenta
+            </h2>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-            <!-- Nombre Completo -->
-            <div class="space-y-1.5">
-                <label class="block text-sm font-bold text-gray-600">Nombre Completo</label>
-                <div class="relative">
-                    <input type="text" value="{{ $datos['usuario']->nombre }}" disabled
-                        class="w-full bg-gray-50/80 px-4 py-2.5 rounded-xl text-sm font-bold text-gray-700 border border-gray-200 cursor-not-allowed select-none">
-                </div>
-            </div>
-
-            <!-- Nombre de Usuario -->
-            <div class="space-y-1.5">
-                <label class="block text-sm font-bold text-gray-600">Nombre de Usuario</label>
-                <div class="relative">
-                    <input type="text" value="{{ $datos['usuario']->nombre_usuario }}" disabled
-                        class="w-full bg-gray-50/80 px-4 py-2.5 rounded-xl text-sm font-bold text-gray-700 border border-gray-200 cursor-not-allowed select-none">
-                </div>
-            </div>
-
-            <!-- Correo Electrónico -->
-            <div class="space-y-1.5">
-                <label class="block text-sm font-bold text-gray-600">Correo Electrónico</label>
-                <div class="relative">
-                    <input type="email" value="{{ $datos['usuario']->email }}" disabled
-                        class="w-full bg-gray-50/80 px-4 py-2.5 rounded-xl text-sm font-bold text-gray-700 border border-gray-200 cursor-not-allowed select-none">
-                </div>
-            </div>
-
-            <!-- Escuela -->
-            <div class="space-y-1.5">
-                <label class="block text-sm font-bold text-gray-600">Escuela / Institución</label>
-                <div class="relative">
-                    <input type="text" value="{{ $datos['usuario']->nombreInstitucion }}" disabled
-                        class="w-full bg-gray-50/80 px-4 py-2.5 rounded-xl text-sm font-bold text-gray-700 border border-gray-200 cursor-not-allowed select-none">
-                </div>
-            </div>
-
-            @if (isset($datos['grupo']) && $datos['grupo'])
-                <!-- Grado/Grupo -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <!-- Nombre Completo -->
                 <div class="space-y-1.5">
-                    <label class="block text-sm font-bold text-gray-600">Grado / Grupo</label>
-                    <input type="text" value="{{ $datos['grupo']->grado }} {{ $datos['grupo']->grupo }}" disabled
-                        class="w-full bg-gray-50/80 px-4 py-2.5 rounded-xl text-sm font-bold text-gray-700 border border-gray-200 cursor-not-allowed select-none">
-                </div>  
-
-                <!-- Especialidad -->
-                <div class="space-y-1.5">
-                    <label class="block text-sm font-bold text-gray-600">Especialidad / Turno</label>
-                    <input type="text" value="{{ $datos['grupo']->nombre }} - {{ $datos['grupo']->turno }}" disabled
-                        class="w-full bg-gray-50/80 px-4 py-2.5 rounded-xl text-sm font-bold text-gray-700 border border-gray-200 cursor-not-allowed select-none">
+                    <label class="block text-sm font-bold text-gray-600">Nombre Completo</label>
+                    <div class="relative">
+                        <input type="text" value="{{ $datos['usuario']->nombre }}" disabled
+                            class="w-full bg-gray-50/80 px-4 py-2.5 rounded-xl text-sm font-bold text-gray-700 border border-gray-200 cursor-not-allowed select-none">
+                    </div>
                 </div>
-            @endif
+
+                <!-- Nombre de Usuario -->
+                <div class="space-y-1.5">
+                    <label class="block text-sm font-bold text-gray-600">Nombre de Usuario</label>
+                    <div class="relative">
+                        <input type="text" value="{{ $datos['usuario']->nombre_usuario }}" disabled
+                            class="w-full bg-gray-50/80 px-4 py-2.5 rounded-xl text-sm font-bold text-gray-700 border border-gray-200 cursor-not-allowed select-none">
+                    </div>
+                </div>
+
+                <!-- Correo Electrónico -->
+                <div class="space-y-1.5">
+                    <label class="block text-sm font-bold text-gray-600">Correo Electrónico</label>
+                    <div class="relative">
+                        <input type="email" value="{{ $datos['usuario']->email }}" disabled
+                            class="w-full bg-gray-50/80 px-4 py-2.5 rounded-xl text-sm font-bold text-gray-700 border border-gray-200 cursor-not-allowed select-none">
+                    </div>
+                </div>
+
+                <!-- Escuela -->
+                <div class="space-y-1.5">
+                    <label class="block text-sm font-bold text-gray-600">Escuela / Institución</label>
+                    <div class="relative">
+                        <input type="text" value="{{ $datos['usuario']->nombreInstitucion }}" disabled
+                            class="w-full bg-gray-50/80 px-4 py-2.5 rounded-xl text-sm font-bold text-gray-700 border border-gray-200 cursor-not-allowed select-none">
+                    </div>
+                </div>
+
+                @if (isset($datos['grupo']) && $datos['grupo'])
+                    <!-- Grado/Grupo -->
+                    <div class="space-y-1.5">
+                        <label class="block text-sm font-bold text-gray-600">Grado / Grupo</label>
+                        <input type="text" value="{{ $datos['grupo']->grado }} {{ $datos['grupo']->grupo }}" disabled
+                            class="w-full bg-gray-50/80 px-4 py-2.5 rounded-xl text-sm font-bold text-gray-700 border border-gray-200 cursor-not-allowed select-none">
+                    </div>  
+
+                    <!-- Especialidad -->
+                    <div class="space-y-1.5">
+                        <label class="block text-sm font-bold text-gray-600">Especialidad / Turno</label>
+                        <input type="text" value="{{ $datos['grupo']->nombre }} - {{ $datos['grupo']->turno }}" disabled
+                            class="w-full bg-gray-50/80 px-4 py-2.5 rounded-xl text-sm font-bold text-gray-700 border border-gray-200 cursor-not-allowed select-none">
+                    </div>
+                @endif
+            </div>
         </div>
-    </div>
+    @endif
 
     <!-- Sección 2: Formulario Cambio de Contraseña -->
     <form method="POST" onsubmit="return confirm('¿Estás seguro de que deseas cambiar la contraseña?')" action="{{ url('/perfil/cambiar-contrasena') }}" 

@@ -18,7 +18,8 @@ class Institucion extends Model
     protected $fillable = [
         "nombre",
         "clave",
-        "tag"
+        "tag",
+        "id_servicio"
     ];
 
     public function usuarios(){
@@ -41,5 +42,7 @@ class Institucion extends Model
         return $this->hasOne(ConfiguracionAvanzada::class, 'id_institucion');
     }
 
-    
+    public function instituciones(){
+        return $this->belongsTo(Institucion::class, 'id_servicio');
+    }
 }

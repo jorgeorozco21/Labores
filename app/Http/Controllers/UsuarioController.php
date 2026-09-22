@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Testing\Fluent\Concerns\Has;
 use Maatwebsite\Excel\Facades\Excel;
 
 class UsuarioController extends Controller
@@ -110,14 +111,31 @@ class UsuarioController extends Controller
             'nombre.max' => "El Nombre no debe de exceder los 255 caracteres",
         ]);
 
-        $institucion = 
-            DB::table("instituciones as i")
-            ->select(
-                "i.tag"
-            )
-            ->where("i.id","=",session('id_institucion'))
-            ->first()
-        ;
+        $institucion = [];
+
+        if (session("tipo") != "labores"){
+            $institucion = 
+                DB::table("instituciones as i")
+                ->select(
+                    "i.tag"
+                )
+                ->where("i.id","=",session('id_institucion'))
+                ->first()
+            ;
+        }else{
+            if (!Hash::check($request->contrasena_seguridad, config('app.operation_password'))){
+                return redirect()->to('/labores/usuarios')->with('error','Contraseña de validacion incorrecta');
+            }
+
+            $institucion = 
+                DB::table("instituciones as i")
+                ->select(
+                    "i.tag"
+                )
+                ->where("i.id","=",$request->id_institucion)
+                ->first()
+            ;
+        }
 
         $tag = $institucion->tag;
 
@@ -135,37 +153,51 @@ class UsuarioController extends Controller
 
         $contrasena = Str::random(12);
         $datosUsuario['contrasena'] = Hash::make($contrasena);
-        $datosUsuario['admin'] = "0";
 
-        $band = false;
-
-        if ($datosUsuario['mantenimiento'] == "on"){
-            $datosUsuario['mantenimiento'] = "1";
-            $band = true;
-        }else $datosUsuario['mantenimiento'] = "0";
-
-        if ($datosUsuario['encargado'] == "on"){
-            $datosUsuario['encargado'] = "1";
-            $band = true;
-        }else $datosUsuario['encargado'] = "0";
-
-        if ($datosUsuario['normal'] == "on"){
+        if (session("tipo") == "labores"){
+            $datosUsuario['admin'] = "1";
+            $datosUsuario['mantenimiento'] = "0";
+            $datosUsuario['encargado'] = "0";
             $datosUsuario['normal'] = "1";
-            $band = true;
-        }else{
-            $datosUsuario['normal'] = "0";
             $datosUsuario['id_grupo'] = null;
+        }else{
+            $datosUsuario['admin'] = "0";
+
+            $band = false;
+
+            if ($datosUsuario['mantenimiento'] == "on"){
+                $datosUsuario['mantenimiento'] = "1";
+                $band = true;
+            }else $datosUsuario['mantenimiento'] = "0";
+
+            if ($datosUsuario['encargado'] == "on"){
+                $datosUsuario['encargado'] = "1";
+                $band = true;
+            }else $datosUsuario['encargado'] = "0";
+
+            if ($datosUsuario['normal'] == "on"){
+                $datosUsuario['normal'] = "1";
+                $band = true;
+            }else{
+                $datosUsuario['normal'] = "0";
+                $datosUsuario['id_grupo'] = null;
+            }
+
+            $validator->after(function ($validator) use ($band) {
+                if (!$band) {
+                    $validator->errors()->add("Tipo", "Debes seleccionar mínimo un tipo de usuario");
+                }
+            });
         }
 
-        $validator->after(function ($validator) use ($band) {
-            if (!$band) {
-                $validator->errors()->add("Tipo", "Debes seleccionar mínimo un tipo de usuario");
+        if (session("tipo") == "labores"){
+            if ($validator->fails()){
+                return redirect()->to('/labores/usuarios')->withErrors($validator);
             }
-        });
-
-
-        if ($validator->fails()){
-            return redirect()->route('admin.usuarios.index')->withErrors($validator);
+        }else{
+            if ($validator->fails()){
+                return redirect()->route('admin.usuarios.index')->withErrors($validator);
+            }
         }
         
         Usuario::create($datosUsuario);
@@ -182,7 +214,16 @@ class UsuarioController extends Controller
             $datosUsuario['nombre_usuario']
         );
 
+        if (session("tipo") == "labores"){
+            return redirect()->to('/labores/usuarios')->with('success', "Usuario creado correctamente");
+        }
+
         return redirect()->route('admin.usuarios.index')->with('success',"Usuario creado correctamente");
+    }
+
+    public function storeAdmin(Request $request, BrevoService $brevo)
+    {
+        
     }
 
     /**
@@ -206,7 +247,7 @@ class UsuarioController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $datosUsuario = $request->except("_token","_method");
+        $datosUsuario = $request->except("_token","_method","contrasena_seguridad");
 
         $validator = Validator::make($request->all(), [
             'nombre_usuario' => "required|string|max:255",
@@ -218,14 +259,31 @@ class UsuarioController extends Controller
             'nombre.max' => "El Nombre no debe de exceder los 255 caracteres",
         ]);
 
-        $institucion = 
-            DB::table("instituciones as i")
-            ->select(
-                "i.tag"
-            )
-            ->where("i.id","=",session('id_institucion'))
-            ->first()
-        ;
+        $institucion = [];
+
+        if (session("tipo") != "labores"){
+            $institucion = 
+                DB::table("instituciones as i")
+                ->select(
+                    "i.tag"
+                )
+                ->where("i.id","=",session('id_institucion'))
+                ->first()
+            ;
+        }else{
+            if (!Hash::check($request->contrasena_seguridad, config('app.operation_password'))){
+                return redirect()->to('/labores/usuarios')->with('error','Contraseña de validacion incorrecta');
+            }
+
+            $institucion = 
+                DB::table("instituciones as i")
+                ->select(
+                    "i.tag"
+                )
+                ->where("i.id","=",$request->id_institucion)
+                ->first()
+            ;
+        }
 
         $tag = $institucion->tag;
 
@@ -253,39 +311,51 @@ class UsuarioController extends Controller
             });
         }
 
-        $datosUsuario['admin'] = "0";
+        if (session("tipo") != "labores"){
+            $datosUsuario['admin'] = "0";
 
-        $band = false;
+            $band = false;
 
-        if ($datosUsuario['mantenimiento'] == "on"){
-            $datosUsuario['mantenimiento'] = "1";
-            $band = true;
-        }else $datosUsuario['mantenimiento'] = "0";
+            if ($datosUsuario['mantenimiento'] == "on"){
+                $datosUsuario['mantenimiento'] = "1";
+                $band = true;
+            }else $datosUsuario['mantenimiento'] = "0";
 
-        if ($datosUsuario['encargado'] == "on"){
-            $datosUsuario['encargado'] = "1";
-            $band = true;
-        }else $datosUsuario['encargado'] = "0";
+            if ($datosUsuario['encargado'] == "on"){
+                $datosUsuario['encargado'] = "1";
+                $band = true;
+            }else $datosUsuario['encargado'] = "0";
 
-        if ($datosUsuario['normal'] == "on"){
-            $datosUsuario['normal'] = "1";
-            $band = true;
-        }else{
-            $datosUsuario['normal'] = "0";
-            $datosUsuario['id_grupo'] = null;
+            if ($datosUsuario['normal'] == "on"){
+                $datosUsuario['normal'] = "1";
+                $band = true;
+            }else{
+                $datosUsuario['normal'] = "0";
+                $datosUsuario['id_grupo'] = null;
+            }
+
+            $validator->after(function ($validator) use ($band) {
+                if (!$band) {
+                    $validator->errors()->add("Tipo", "Debes seleccionar mínimo un tipo de usuario");
+                }
+            });
         }
 
-        $validator->after(function ($validator) use ($band) {
-            if (!$band) {
-                $validator->errors()->add("Tipo", "Debes seleccionar mínimo un tipo de usuario");
+        if (session("tipo") == "labores"){
+            if ($validator->fails()){
+                return redirect()->to('/labores/usuarios')->withErrors($validator);
             }
-        });
-
-        if ($validator->fails()){
-            return redirect()->route('admin.usuarios.index')->withErrors($validator);
+        }else{
+            if ($validator->fails()){
+                return redirect()->route('admin.usuarios.index')->withErrors($validator);
+            }
         }
 
         Usuario::where("id","=",$id)->update($datosUsuario);
+
+        if (session("tipo") == "labores"){
+            return redirect()->to('/labores/usuarios')->with('success', "Informacion editada correctamente");
+        }
 
         return redirect()->route('admin.usuarios.index')->with('success','Informacion editada correctamente');
 
@@ -302,6 +372,19 @@ class UsuarioController extends Controller
         $usuario->delete();
 
         return redirect()->route('admin.usuarios.index')->with('success','Usuario borrado correctamente');
+    }
+
+    public function destroyAdmin(Request $request, string $id)
+    {
+        if (!Hash::check($request->contrasena_seguridad, config('app.operation_password'))){
+            return redirect()->to('/labores/usuarios')->with('error','Contraseña de validacion incorrecta');
+        }
+
+        $usuario = Usuario::findOrFail($id);
+
+        $usuario->delete();
+
+        return redirect()->to('/labores/usuarios')->with('success','Usuario borrado correctamente');
     }
 
     /**
@@ -332,12 +415,42 @@ class UsuarioController extends Controller
         ]);
     }
 
+    public function cambioContrasenaAdmin(string $id, Request $request, BrevoService $brevo){
+        if (!Hash::check($request->cambio_contrasena, config('app.operation_password'))){
+            return response()->json([
+                'message' => 'Contraseña de validacion incorrecta'
+            ]);
+        }
+
+        $nuevaContrasena = Str::random(12);
+
+        $usuario = Usuario::findOrFail($id);
+
+        Usuario::where("id","=",$id)->update(['contrasena' => Hash::make($nuevaContrasena)]);
+
+        $html = view('emails.cambio_contrasena', [
+            'usuario' => $usuario['nombre_usuario'],
+            'contrasena' => $nuevaContrasena,
+        ])->render();
+
+        $brevo->send(
+            $usuario['email'],
+            'Tu contraseña ha sido actualizada',
+            $html,
+            $usuario['nombre_usuario']
+        );
+
+        return response()->json([
+            'message' => 'Contraseña cambiada correctamente'
+        ]);
+    }
+
     public function archivoCarga(){
 
         return Excel::download(new ArchivoUsuariosExport, 'usuarios.xlsx');
     } 
 
-    public function actualizarContrasena(Request $request)
+    public function actualizarContrasena(Request $request, BrevoService $brevo)
     {
         $request->validate([
             'contrasenaActual' => 'required',
@@ -358,6 +471,20 @@ class UsuarioController extends Controller
         DB::table('usuarios')
         ->where('id', session('id_usuario'))
         ->update(['contrasena' => Hash::make($request->nuevaContrasena)]);
+
+        if (session("tipo") == "labores"){
+            $html = view('emails.cambio_contrasena', [
+            'usuario' => $usuario->nombre_usuario,
+            'contrasena' => $request->nuevaContrasena,
+            ])->render();
+
+            $brevo->send(
+                $usuario->email,
+                'Tu contraseña ha sido actualizada',
+                $html,
+                $usuario->nombre_usuario
+            );
+        }
 
         return back()->with('success', '¡Contraseña actualizada correctamente!');
     }

@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string("encargado");
             $table->string("normal");
             $table->unsignedBigInteger("id_grupo")->nullable();
-            $table->unsignedBigInteger("id_institucion");
+            $table->unsignedBigInteger("id_institucion")->nullable();
             $table->timestamps();
 
             $table->foreign("id_grupo")->references("id")->on("grupos");

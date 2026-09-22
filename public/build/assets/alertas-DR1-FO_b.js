@@ -1,1 +1,0 @@
-document.addEventListener("DOMContentLoaded",()=>{const e=document.querySelector(".success"),t=document.querySelector(".errores");e&&setTimeout(()=>{e.style.display="none"},4e3),t&&setTimeout(()=>{t.style.display="none"},6e3)});

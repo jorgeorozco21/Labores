@@ -1,6 +1,6 @@
 {
   "resources/css/app.css": {
-    "file": "assets/app-DUX-asKb.css",
+    "file": "assets/app-CjO2LoNf.css",
     "src": "resources/css/app.css",
     "isEntry": true,
     "name": "app",
@@ -9,7 +9,7 @@
     ]
   },
   "resources/js/Admin/alertas.js": {
-    "file": "assets/alertas-DR1-FO_b.js",
+    "file": "assets/alertas-DNcpJtg9.js",
     "name": "alertas",
     "src": "resources/js/Admin/alertas.js",
     "isEntry": true
@@ -78,7 +78,7 @@
     ]
   },
   "resources/js/Admin/computadoras.js": {
-    "file": "assets/computadoras-Dd8jTs1G.js",
+    "file": "assets/computadoras-CdRj5IQ9.js",
     "name": "computadoras",
     "src": "resources/js/Admin/computadoras.js",
     "isEntry": true
@@ -108,19 +108,19 @@
     "isEntry": true
   },
   "resources/js/Admin/crud_usuarios.js": {
-    "file": "assets/crud_usuarios-BrLA5L3o.js",
+    "file": "assets/crud_usuarios-DFaTjXV-.js",
     "name": "crud_usuarios",
     "src": "resources/js/Admin/crud_usuarios.js",
     "isEntry": true
   },
   "resources/js/Admin/laboratorios_informes.js": {
-    "file": "assets/laboratorios_informes-qAOODFb8.js",
+    "file": "assets/laboratorios_informes-CfmlvHr9.js",
     "name": "laboratorios_informes",
     "src": "resources/js/Admin/laboratorios_informes.js",
     "isEntry": true
   },
   "resources/js/Admin/materiales.js": {
-    "file": "assets/materiales-DOTucbpL.js",
+    "file": "assets/materiales-9duWF4of.js",
     "name": "materiales",
     "src": "resources/js/Admin/materiales.js",
     "isEntry": true
@@ -132,7 +132,7 @@
     "isEntry": true
   },
   "resources/js/Admin/reportes.js": {
-    "file": "assets/reportes-B255Fqsz.js",
+    "file": "assets/reportes-CeeGVERv.js",
     "name": "reportes",
     "src": "resources/js/Admin/reportes.js",
     "isEntry": true
@@ -150,13 +150,13 @@
     "isEntry": true
   },
   "resources/js/Encargado/solicitudes_aceptadas_computo.js": {
-    "file": "assets/solicitudes_aceptadas_computo-C-lRH_dh.js",
+    "file": "assets/solicitudes_aceptadas_computo-D6pAS8zd.js",
     "name": "solicitudes_aceptadas_computo",
     "src": "resources/js/Encargado/solicitudes_aceptadas_computo.js",
     "isEntry": true
   },
   "resources/js/Encargado/solicitudes_pendientes.js": {
-    "file": "assets/solicitudes_pendientes-CQVTi8Ih.js",
+    "file": "assets/solicitudes_pendientes-DSfGBCdV.js",
     "name": "solicitudes_pendientes",
     "src": "resources/js/Encargado/solicitudes_pendientes.js",
     "isEntry": true
@@ -168,13 +168,13 @@
     "isEntry": true
   },
   "resources/js/Mantenimiento/reportes_computo.js": {
-    "file": "assets/reportes_computo-DKJa-fiM.js",
+    "file": "assets/reportes_computo-BTIFtI3A.js",
     "name": "reportes_computo",
     "src": "resources/js/Mantenimiento/reportes_computo.js",
     "isEntry": true
   },
   "resources/js/Mantenimiento/reportes_materiales.js": {
-    "file": "assets/reportes_materiales-CjU7cGes.js",
+    "file": "assets/reportes_materiales-CSkGjx6a.js",
     "name": "reportes_materiales",
     "src": "resources/js/Mantenimiento/reportes_materiales.js",
     "isEntry": true
@@ -192,7 +192,7 @@
     "isEntry": true
   },
   "resources/js/Normal/creacion_solicitudes.js": {
-    "file": "assets/creacion_solicitudes-bVNrEXlB.js",
+    "file": "assets/creacion_solicitudes-K5YyMQQk.js",
     "name": "creacion_solicitudes",
     "src": "resources/js/Normal/creacion_solicitudes.js",
     "isEntry": true,
@@ -201,7 +201,7 @@
     ]
   },
   "resources/js/Normal/creacion_solicitudes_computo.js": {
-    "file": "assets/creacion_solicitudes_computo-CjaV4vhU.js",
+    "file": "assets/creacion_solicitudes_computo--_f8dJba.js",
     "name": "creacion_solicitudes_computo",
     "src": "resources/js/Normal/creacion_solicitudes_computo.js",
     "isEntry": true,
@@ -216,7 +216,7 @@
     "isEntry": true
   },
   "resources/js/Normal/solicitudes.js": {
-    "file": "assets/solicitudes-CbkpYPWO.js",
+    "file": "assets/solicitudes-DIwweuyx.js",
     "name": "solicitudes",
     "src": "resources/js/Normal/solicitudes.js",
     "isEntry": true

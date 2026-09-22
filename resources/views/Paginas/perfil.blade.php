@@ -11,7 +11,7 @@
     <x-admin.alertas-usuarios />
     <div class="flex h-screen">
         <!-- Sidebar -->
-        @if (session('tipo') == 'admin') <x-admin.sidebar-admin :admin="$admin" /> @else <x-paginas.sidebar-perfil /> @endif
+        @if (session('tipo') == 'labores') <x-admin-labores.sidebar-labores :admin="$admin" /> @elseif (session('tipo') == 'admin') <x-admin.sidebar-admin :admin="$admin" /> @else <x-paginas.sidebar-perfil /> @endif
         <!-- Contenedor -->
         <main class="flex-1 flex flex-col overflow-hidden bg-[#F9FAFB]">
             <!-- Header -->

@@ -17,6 +17,10 @@ class CheckLogin
     {
         // 1. Verificación normal de sesión
         if (!session()->has('id_usuario')) {
+            if ($request->expectsJson()) {
+                return response()->json(['message' => 'La sesión ha expirado.'], 401);
+            }
+
             return redirect()->route('login.index');
         }
 

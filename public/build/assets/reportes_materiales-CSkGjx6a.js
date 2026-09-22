@@ -34,7 +34,7 @@ const c={id:document.getElementById("id_usuario").value,nombre:document.getEleme
                 <!-- Estado del Reporte -->
                 <td class="px-6 py-4 text-center">
                     <div class="flex justify-center">
-                        <span class="px-2 py-1 bg-green-50 text-green-700 text-xs font-bold rounded-lg border border-green-100 uppercase">
+                        <span class="px-3 py-1 bg-green-50 text-green-600 text-[10px] font-bold rounded-lg border border-green-100 uppercase">
                             ${e.estado==null?"espera":e.estado}
                         </span>
                     </div>
@@ -42,12 +42,12 @@ const c={id:document.getElementById("id_usuario").value,nombre:document.getEleme
 
                 <td class="px-6 py-4 text-center">
                     <div class="flex justify-center">
-                        <span class="px-2 py-1 bg-orange-50 text-orange-700 text-xs font-bold rounded-lg border border-orange-100 uppercase">
+                        <span class="px-3 py-1 bg-orange-50 text-orange-600 text-[10px] font-bold rounded-lg border border-orange-100 uppercase">
                             ${e.estado==null||e.estado=="reprogramado"?"en proceso":"reparado"}
                         </span>
 
                         <button data-estado="${e.estado==null||e.estado=="reprogramado"?"en proceso":"reparado"}" data-id="${e.id}"
-                            class="cambiar p-2 bg-[#7B1FA3] text-white rounded-xl hover:bg-[#6A1B8E] transition-all shadow-lg shadow-purple-100 active:scale-[0.98]"
+                            class="cambiar px-3 py-1 bg-[#7B1FA3] text-white rounded-xl hover:bg-[#6A1B8E] transition-all shadow-lg shadow-purple-100 active:scale-[0.98] ml-2"
                             title="Guardar cambio">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                         </button>
@@ -57,7 +57,7 @@ const c={id:document.getElementById("id_usuario").value,nombre:document.getEleme
                 <td class="px-6 py-4 text-center">
         `,e.estado=="en proceso"&&(t+=`
                 <div class="flex justify-center">
-                    <button data-id="${e.id}" data-estado="sin reparacion" data-inventario="${e.id_inventario}" data-cantidad="${e.cantidad}" class="reportar flex items-center gap-1 px-3 py-1.5 rounded-lg bg-red-50 text-red-600 hover:bg-red-600 hover:text-white transition-all text-xs font-bold">
+                    <button data-id="${e.id}" data-estado="sin reparacion" data-inventario="${e.id_inventario}" data-cantidad="${e.cantidad}" class="reportar flex items-center gap-1 px-3 py-1 rounded-lg bg-red-50 text-red-600 hover:bg-red-600 hover:text-white transition-all text-xs font-bold">
                         Sin Reparacion
                     </button>
                 </div>

@@ -11,6 +11,7 @@ use App\Http\Controllers\CargaUsuariosController;
 use App\Http\Controllers\ComputadoraController;
 use App\Http\Controllers\GrupoController;
 use App\Http\Controllers\InventarioController;
+use App\Http\Controllers\InstitucionesController;
 use App\Http\Controllers\LaboratorioController;
 use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\UsuarioController;
@@ -24,6 +25,159 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('check.login')->group(function (){
+    Route::middleware(['tipo:labores'])->group(function (){
+        Route::resource('/labores/instituciones', InstitucionesController::class)->names('labores.instituciones');
+
+        Route::get('/admin-labores/instituciones/servicios', function (Illuminate\Http\Request $request){
+            $servicios = 
+                DB::table('instituciones as i')
+                ->join('servicios as s','s.id','=','i.id_servicio')
+                ->select(
+                    's.gestor_laboratorio'
+                )
+                ->where('i.id','=',$request->id)
+                ->first()
+            ;
+
+            return response()->json($servicios);
+        });
+
+        Route::get('/admin-labores/instituciones/editar', function (Illuminate\Http\Request $request){
+            $institucion = 
+                DB::table("instituciones as i")
+                ->join('servicios as s','s.id','=','i.id_servicio')
+                ->select(
+                    "i.id",
+                    "i.nombre",
+                    "i.tag",
+                    "i.clave",
+                    's.gestor_laboratorio'
+                )
+                ->where('i.id','=', $request->id)
+                ->first()
+            ;
+
+            return response()->json($institucion);
+        });
+
+        Route::get('/api/instituciones', function (Illuminate\Http\Request $request){
+            $instituciones = 
+                DB::table('instituciones as i')
+                ->select(
+                    'i.id',
+                    'i.nombre',
+                    'i.clave',
+                    'i.tag'
+                )
+                ->where(function($query) use ($request){
+                    $query->where('i.nombre','ilike','%'.$request->texto.'%')
+                        ->orWhere('i.clave','ilike','%'.$request->texto.'%');
+                })
+                ->orderBy('i.id','asc')
+                ->get()
+            ;
+
+            return response()->json($instituciones);
+        });
+
+        Route::patch('/labores/usuarios/{id}/cambiar-contrasena', [UsuarioController::class, 'cambioContrasenaAdmin']);
+        Route::delete('/labores/usuarios/{id}/admin', [UsuarioController::class, 'destroyAdmin'])->name('labores.usuarios.destroyAdmin');
+
+        Route::resource('/labores/usuarios', UsuarioController::class)->except('index')->names([
+            'store' => 'labores.usuarios.storeAdmin'
+        ]);
+
+        Route::get('/labores/usuarios', function (){
+            $admin =
+                DB::table("usuarios as u")
+                ->select(
+                    "u.nombre_usuario",
+                    "u.email"
+                )
+                ->where('u.id','=',session('id_usuario'))
+                ->first()
+            ;
+
+            $usuarios = 
+                DB::table('usuarios as u')
+                ->join('instituciones as i','i.id','=','u.id_institucion')
+                ->select(
+                    'u.id',
+                    'u.nombre_usuario',
+                    'u.nombre',
+                    'u.email',
+                    'i.nombre as nombre_institucion'
+                )
+                ->where('u.admin','=','1')
+                ->orderBy('nombre_institucion','asc')
+                ->get()
+            ;
+
+            $instituciones = 
+                DB::table('instituciones as i')
+                ->select(
+                    'i.id',
+                    'i.nombre'
+                )
+                ->get()
+            ;
+
+            return view('Admin_Labores.Usuarios.index' , compact('admin','usuarios','instituciones'));
+        });
+
+        Route::get('/admin-labores/usuarios/editar', function (Illuminate\Http\Request $request){
+            $datos["usuarios"] = 
+                DB::table('usuarios as u')
+                ->join('instituciones as i','i.id','=','u.id_institucion')
+                ->select(
+                    'u.id',
+                    'u.nombre_usuario',
+                    'u.nombre',
+                    'u.email',
+                    'i.nombre as nombre_institucion',
+                    'u.id_institucion'
+                )
+                ->where('u.id','=',$request->id)
+                ->get()
+            ;
+
+            $datos["instituciones"] = 
+                DB::table('instituciones as i')
+                ->select(
+                    'i.id',
+                    'i.nombre'
+                )
+                ->get()
+            ;
+
+            return response()->json($datos);
+        });
+
+        Route::get('/api/usuarios-admin', function (Illuminate\Http\Request $request){
+            $usuarios = 
+                DB::table('usuarios as u')
+                ->join('instituciones as i','i.id','=','u.id_institucion')
+                ->select(
+                    'u.id',
+                    'u.nombre_usuario',
+                    'u.email',
+                    'u.nombre',
+                    'i.nombre as nombre_institucion',
+                    'u.id_institucion'
+                )
+                ->where('u.admin','=','1')
+                ->where(function ($query) use ($request) {
+                    $texto = '%' . $request->input('texto', '') . '%';
+                    $query->where('u.nombre_usuario','ilike',$texto)
+                        ->orWhere('u.nombre','ilike',$texto);
+                })
+                ->orderBy('nombre_institucion','asc')
+                ->get()
+            ;
+
+            return response()->json($usuarios);
+        });
+    });
 
     Route::middleware(['tipo:admin'])->group(function (){
 
@@ -1984,20 +2138,37 @@ Route::middleware('check.login')->group(function (){
     })->name('seleccionar-perfil');
     
     Route::get('/perfil', function(){
-        $datos['usuario'] = 
-            DB::table('usuarios as u')
-            ->join('instituciones as i','i.id','=','u.id_institucion')
-            ->select(
-                'u.id',
-                'u.nombre_usuario',
-                'u.nombre',
-                'u.email',
-                'u.normal',
-                'i.nombre as nombreInstitucion'
-            )
-            ->where('u.id','=',session('id_usuario'))
-            ->first()
-        ;
+        $datos = [];
+
+        if (session("tipo") != "labores"){
+            $datos['usuario'] = 
+                DB::table('usuarios as u')
+                ->join('instituciones as i','i.id','=','u.id_institucion')
+                ->select(
+                    'u.id',
+                    'u.nombre_usuario',
+                    'u.nombre',
+                    'u.email',
+                    'u.normal',
+                    'i.nombre as nombreInstitucion'
+                )
+                ->where('u.id','=',session('id_usuario'))
+                ->first()
+            ;
+        }else{
+            $datos['usuario'] = 
+                DB::table('usuarios as u')
+                ->select(
+                    'u.id',
+                    'u.nombre_usuario',
+                    'u.nombre',
+                    'u.email',
+                    'u.normal',
+                )
+                ->where('u.id','=',session('id_usuario'))
+                ->first()
+            ;
+        }
     
         if ($datos['usuario']->normal == '1'){
             $datos['grupo'] = 
@@ -2014,7 +2185,7 @@ Route::middleware('check.login')->group(function (){
             ;
         }
     
-        if (session('tipo') == 'admin'){
+        if (session('tipo') == 'admin' || session('tipo') == 'labores'){
             $admin = 
                 DB::table('usuarios as u')
                 ->select(

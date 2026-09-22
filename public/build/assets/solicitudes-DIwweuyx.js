@@ -6,7 +6,7 @@ const r=document.getElementById("contenedor-materiales-solicitar"),d=document.ge
                 </div>
             </div>
         `}),r.innerHTML=e}const f=document.getElementById("cart"),n=document.getElementById("overlay");function m(){f.classList.remove("translate-y-full"),n.classList.remove("opacity-0","pointer-events-none")}function h(){r.innerHTML="",f.classList.add("translate-y-full"),n.classList.add("opacity-0","pointer-events-none")}n.addEventListener("click",h);i.addEventListener("click",()=>{if(confirm("Deseas cancelar la solicitud ??")){const e=i.dataset.ideliminar;r.innerHTML="",delete i.dataset.ideliminar,w(e),l()}});async function w(a){try{const e=await fetch(`/usuario/normal/eliminar-solicitud/${a}`,{method:"DELETE",headers:{"Content-Type":"application/json","X-CSRF-TOKEN":document.querySelector('meta[name="csrf-token"]').getAttribute("content"),Accept:"application/json"}}),t=await e.json();e.ok?alert("Solicitud cancelada."):alert("Error: "+t.message)}catch(e){console.error("Error en la conexión:",e)}}async function x(a){try{const e=await fetch(`/usuario/normal/eliminar-solicitud-eliminada/${a}`,{method:"DELETE",headers:{"Content-Type":"application/json","X-CSRF-TOKEN":document.querySelector('meta[name="csrf-token"]').getAttribute("content"),Accept:"application/json"}})}catch(e){console.error("Error en la conexión:",e)}}async function l(){const e=await(await fetch(`/usuario/normal/actualizar-solicitudes?id=${v}`)).json();b(e)}function b(a){d.innerHTML="";let e="";a.solicitudes_eliminadas.forEach(t=>{e+=`
-            <div data-id="${solicitud.id}" class="solicitud-eliminada bg-white p-6 rounded-[20px] border border-gray-100 shadow-sm flex w-full hover:shadow-md hover:border-2 transition-shadow cursor-pointer">
+            <div data-id="${t.id}" class="solicitud-eliminada bg-white p-6 rounded-[20px] border border-gray-100 shadow-sm flex w-full hover:shadow-md hover:border-2 transition-shadow cursor-pointer">
                 <div class="space-y-2 w-full">
                     <div class="flex justify-between w-full">
                         <h2 class="text-lg font-extrabold text-[#1e293b] tracking-tight">
@@ -17,11 +17,11 @@ const r=document.getElementById("contenedor-materiales-solicitar"),d=document.ge
                         <div>
                             <!-- ID de la Solicitud -->
                             <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">
-                                <span class="text-gray-600">ID:</span> ${solicitud.id_solicitud}
+                                <span class="text-gray-600">ID:</span> ${t.id_solicitud}
                             </p>
                             <!-- Fecha de la Solicitud -->
                             <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">
-                                <span class="text-gray-600">Fecha:</span> ${solicitud.fecha}
+                                <span class="text-gray-600">Fecha:</span> ${t.fecha}
                             </p>
                         </div>
                         <div>

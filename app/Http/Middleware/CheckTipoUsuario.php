@@ -16,6 +16,10 @@ class CheckTipoUsuario
     public function handle(Request $request, Closure $next, $tipoEsperado): Response
     {
         if (session('tipo') !== $tipoEsperado){
+            if ($request->expectsJson()) {
+                return response()->json(['message' => 'No tienes acceso a esta área.'], 403);
+            }
+
             return redirect('/seleccionar-tipo-usuario')->with('error', 'No tienes acceso a esta área.');
         }
 

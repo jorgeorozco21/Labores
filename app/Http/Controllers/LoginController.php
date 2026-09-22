@@ -41,6 +41,26 @@ class LoginController extends Controller
             return redirect()->route('login.index')->with("error", 'Usuario y/o Contraseña incorrecta')->withInput();
         }
 
+        if ($usuario->nombre_usuario == "labores" && $usuario->email == "hola.labores.web@gmail.com" && $usuario->id_institucion == null){
+            session(["tipo" => "labores"]);
+            session (["id_usuario" => $usuario->id]);
+            return redirect('/labores/instituciones');
+        }
+
+        $institucion = 
+            DB::table("instituciones as i")
+            ->join('servicios as s','s.id','=','i.id_servicio')
+            ->select(
+                's.gestor_laboratorio'
+            )
+            ->where('i.id','=',$usuario->id_institucion)
+            ->first()
+        ;
+
+        if ($institucion->gestor_laboratorio == '0'){
+            return redirect()->route('login.index')->with("error", 'Servicios de institucion no activos')->withInput();
+        }
+
         session([
             "id_usuario" => $usuario->id,
             "nombre_usuario" => $usuario->nombre_usuario,
