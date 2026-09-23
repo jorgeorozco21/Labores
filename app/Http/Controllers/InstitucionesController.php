@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ConfiguracionAvanzada;
 use App\Models\Institucion;
 use App\Models\Servicios;
 use Illuminate\Http\Request;
@@ -80,7 +81,14 @@ class InstitucionesController extends Controller
 
         $datosInstitucion['id_servicio'] = $idServicios->id;
 
-        Institucion::create($datosInstitucion);
+        $idInstitucion = Institucion::create($datosInstitucion);
+
+        ConfiguracionAvanzada::create([
+            'id_institucion' => $idInstitucion->id,
+            'limite_solicitudes_prestamos' => '-1',
+            'limite_solicitudes_computo' => '-1',
+            'limite_bloqueo' => '-1'
+        ]);
 
         return redirect()->route('labores.instituciones.index')->with('success','Informacion agregada correctamente');
     }

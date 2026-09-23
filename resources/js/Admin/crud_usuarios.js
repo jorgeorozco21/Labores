@@ -104,6 +104,12 @@ document.addEventListener("click", function(e){
         
         informacionEditar(id); 
     } 
+
+    const historial = e.target.closest(".historial");
+
+    if (historial){
+        informacionAuditoriaHistorial(historial.dataset.id);
+    }
 });
 
 // funcion para cerrar el formulario de editar
@@ -212,6 +218,39 @@ cerrarModalEdicionMasiva.addEventListener('click', function (){
     grupoNuevo.selectedIndex = 0;
     modalEdicionMasiva.style.display = "none";
 });
+
+async function informacionAuditoriaHistorial(id){
+    const response = await fetch(`/api/usuario/historial-auditoria?id=${id}`);
+    const data = await response.json();
+
+    openAuditoriaModal(data);
+}
+
+function openAuditoriaModal(data){
+    const tabla = document.getElementById("contenedor-auditoria");
+
+    data.forEach(a => {
+        const info = JSON.parse(a.info_auditoria);
+        tabla.innerHTML += `
+            <tr>
+                <th>${info.nombre}</td>
+                <td>${info.email}</td>
+                <td>${a.created_at}</td>
+                <td>${a.estado}</td>
+            </tr>
+        `;
+    });
+
+    document.getElementById("auditoria-Modal").classList.remove("hidden");
+}
+
+function closeAuditoriaModal(){
+    document.getElementById("contenedor-auditoria").innerHTML = "";
+    document.getElementById("auditoria-Modal").classList.add("hidden");
+}
+
+document.getElementById("cerrar-auditoria").addEventListener("click", closeAuditoriaModal);
+document.getElementById("fondo-auditoria").addEventListener("click", closeAuditoriaModal);
 
 /*const filtroTipo = document.getElementById("filtrar-tipo");
 

@@ -21,6 +21,7 @@ use App\Http\Controllers\SolicitudEliminadaController;
 use App\Http\Controllers\SolicitudesComputoController;
 use App\Http\Controllers\SolicitudesController;
 use App\Http\Controllers\ConfiguracionAvanzadaController;
+use App\Http\Controllers\HistorialAlumnosController;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
@@ -289,7 +290,28 @@ Route::middleware('check.login')->group(function (){
                     "g.nombre as nombreGrupo",
                     "g.grado",
                     "g.grupo",
-                    "g.turno"
+                    "g.turno",
+                    DB::raw("(
+                        SELECT COALESCE(
+                            (SELECT json_agg(ha.*) 
+                            FROM historial_alumnos ha 
+                            WHERE CAST(ha.info_usuario->>'id' AS INTEGER) = u.id 
+                            AND ha.estado = 'pendiente'
+                            AND NOT EXISTS (
+                                SELECT 1 
+                                FROM historial_alumnos ha_dup 
+                                WHERE ha_dup.id_solicitud = ha.id_solicitud
+                                AND ha_dup.id != ha.id
+                            )), 
+                            '[]'::json
+                        )
+                    ) as historiales_pendientes"),
+                    DB::raw("(
+                        SELECT COALESCE(json_agg(ha_rec.*), '[]'::json)
+                        FROM historial_alumnos ha_rec 
+                        WHERE CAST(ha_rec.info_usuario->>'id' AS INTEGER) = u.id
+                        AND ha_rec.estado = 'recibido'
+                    ) as historiales_recibidos")
                 )
             ;
 
@@ -354,6 +376,21 @@ Route::middleware('check.login')->group(function (){
             ;
 
             return response()->json($datos);
+        });
+
+        Route::get('/api/usuario/historial-auditoria' , function(Illuminate\Http\Request $request){
+            $auditoria = 
+                DB::table('historial_alumnos as ha')
+                ->select(
+                    'ha.info_auditoria',
+                    'ha.created_at',
+                    'ha.estado'
+                )
+                ->where('ha.id_solicitud','=', $request->id)
+                ->get();
+            ;
+
+            return response()->json($auditoria);
         });
 
         Route::get('/admin/laboratorios/exportar-laboratorios', [LaboratorioController::class, 'exportarLaboratorios'])->name('admin.laboratorios.exportarLaboratorios');
@@ -1609,6 +1646,12 @@ Route::middleware('check.login')->group(function (){
             return response()->json($solicitudes);
         });
 
+        Route::get('/api/info-solictud-completar', function (Illuminate\Http\Request $request){
+            $solicitud = DB::table("solicitudes as s")->select('s.*')->where('s.id','=',$request->id)->first();
+
+            return response()->json($solicitud);
+        });
+
         Route::get('/api/info-materiales-solicitud-prestamo', function (Illuminate\Http\Request $request){
 
             $solicitud = 
@@ -1624,6 +1667,137 @@ Route::middleware('check.login')->group(function (){
         });
 
         Route::post('/creacion-reporte-material', [ReporteMaterialController::class, 'store']);
+
+        Route::get('/usuario/encargado/historial-alumno', function (){
+            $bloqueo =  
+                DB::table('configuracion_avanzada as ca')
+                ->select(
+                    'ca.limite_bloqueo'
+                )
+                ->where('ca.id_institucion','=',session('id_institucion'))
+                ->first()
+            ;
+
+            $laboratorios = 
+                DB::table('laboratorios as l')
+                ->select(
+                    'l.id',
+                    'l.nombre'
+                )
+                ->where('l.id_institucion','=',session('id_institucion'))
+                ->where('l.tipo','=','prestamos')
+                ->get()
+            ;
+
+            $usuario = 
+                DB::table('usuarios as u')
+                ->select(
+                    'u.id',
+                    'u.nombre',
+                    'u.email'
+                )   
+                ->where("u.id","=",session('id_usuario'))
+                ->first()
+            ;
+
+            $historiales = 
+                DB::table('historial_alumnos as ha')
+                ->join('laboratorios as l', function($join) {
+                    $join->on(
+                        DB::raw("CAST(ha.info_usuario->>'idLaboratorio' AS INTEGER)"), 
+                        '=', 
+                        'l.id'
+                    );
+                })
+                ->select(
+                    'ha.id',
+                    'ha.info_usuario',
+                    'ha.info_material',
+                    'ha.descripcion',
+                    'ha.created_at',
+                    DB::raw("(
+                        SELECT COUNT(*) 
+                        FROM historial_alumnos ha_sub 
+                        WHERE CAST(ha_sub.info_usuario->>'id' AS INTEGER) = CAST(ha.info_usuario->>'id' AS INTEGER)
+                        AND ha_sub.estado = 'pendiente'
+                        AND NOT EXISTS (
+                            SELECT 1 
+                            FROM historial_alumnos ha_sub_dup 
+                            WHERE ha_sub_dup.id_solicitud = ha_sub.id_solicitud 
+                            AND ha_sub_dup.id != ha_sub.id
+                        )
+                    ) as total_usuario_pendientes")
+                )
+                ->where('ha.estado','=','pendiente')
+                ->where('l.id_institucion','=',session('id_institucion'))
+                ->whereNotExists(function ($query) {
+                    $query->from('historial_alumnos as ha_dup')
+                        ->whereColumn('ha_dup.id_solicitud', 'ha.id_solicitud')
+                        ->where('ha_dup.id', '!=', DB::raw('ha.id'));
+                })
+                ->orderBy('ha.id','asc')
+                ->get()
+            ;
+
+            return view('Encargado_Area.historial-alumnos', compact('usuario','historiales','laboratorios','bloqueo'));
+        });
+
+        Route::get('/api/usuario/encargado/historiales', function (Illuminate\Http\Request $request){
+            $query = 
+                DB::table('historial_alumnos as ha')
+                ->join('laboratorios as l', function($join) {
+                    $join->on(
+                        DB::raw("CAST(ha.info_usuario->>'idLaboratorio' AS INTEGER)"), 
+                        '=', 
+                        'l.id'
+                    );
+                })
+                ->select(
+                    'ha.id',
+                    'ha.info_usuario',
+                    'ha.info_material',
+                    'ha.descripcion',
+                    'ha.created_at',
+                    DB::raw("(
+                        SELECT COUNT(*) 
+                        FROM historial_alumnos ha_sub 
+                        WHERE CAST(ha_sub.info_usuario->>'id' AS INTEGER) = CAST(ha.info_usuario->>'id' AS INTEGER)
+                        AND ha_sub.estado = 'pendiente'
+                        AND NOT EXISTS (
+                            SELECT 1 
+                            FROM historial_alumnos ha_sub_dup 
+                            WHERE ha_sub_dup.id_solicitud = ha_sub.id_solicitud 
+                            AND ha_sub_dup.id != ha_sub.id
+                        )
+                    ) as total_usuario_pendientes")
+                )
+                ->where('ha.estado','=','pendiente')
+                ->where('l.id_institucion','=',session('id_institucion'))
+                ->whereNotExists(function ($query) {
+                    $query->from('historial_alumnos as ha_dup')
+                        ->whereColumn('ha_dup.id_solicitud', 'ha.id_solicitud')
+                        ->where('ha_dup.id', '!=', DB::raw('ha.id'));
+                })
+            ;
+
+            if ($request->filtro != "Sin Filtro"){
+                $query->where(DB::raw("ha.info_usuario->>'idLaboratorio'"), '=', $request->filtro);
+            }
+        
+            if ($request->texto) {
+                $query->where(function($q) use ($request) {
+                    $term = '%' . $request->texto . '%';
+                    $q->where(DB::raw("CAST(ha.id AS TEXT)"), 'ilike', $term)
+                    ->orWhere(DB::raw("ha.info_usuario->>'nombre'"), 'ilike', $term);
+                });
+            }
+
+            $historiales = $query->orderBy('ha.id','asc')->get();
+
+            return response()->json($historiales);
+        });
+
+        Route::post('/actualizar-historial-alumno', [HistorialAlumnosController::class, 'store']);
         
         Route::get('/usuario/encargado/solicitudes-pendientes-computo', function(){
         
@@ -2185,6 +2359,7 @@ Route::middleware('check.login')->group(function (){
             ;
         }
     
+        $historial = [];
         if (session('tipo') == 'admin' || session('tipo') == 'labores'){
             $admin = 
                 DB::table('usuarios as u')
@@ -2197,9 +2372,68 @@ Route::middleware('check.login')->group(function (){
             ;
     
             return view('Paginas.perfil', compact('datos','admin'));
+        }else{
+            $historial['recibidos'] = 
+                DB::table('historial_alumnos as ha')
+                ->join('laboratorios as l', function($join) {
+                    $join->on(
+                        DB::raw("CAST(ha.info_usuario->>'idLaboratorio' AS INTEGER)"), 
+                        '=', 
+                        'l.id'
+                    );
+                })
+                ->select(
+                    'ha.id',
+                    'ha.info_material',
+                    'ha.descripcion',
+                    'ha.created_at'
+                )
+                ->where('ha.estado','=','recibido')
+                ->where('l.id_institucion','=',session('id_institucion'))
+                ->orderBy('ha.id','asc')
+                ->get()
+            ;
+
+            $historial['pendientes'] = 
+                DB::table('historial_alumnos as ha')
+                ->join('laboratorios as l', function($join) {
+                    $join->on(
+                        DB::raw("CAST(ha.info_usuario->>'idLaboratorio' AS INTEGER)"), 
+                        '=', 
+                        'l.id'
+                    );
+                })
+                ->select(
+                    'ha.id',
+                    'ha.info_material',
+                    'ha.descripcion',
+                    'ha.created_at',
+                    DB::raw("(
+                        SELECT COUNT(*) 
+                        FROM historial_alumnos ha_sub 
+                        WHERE CAST(ha_sub.info_usuario->>'id' AS INTEGER) = CAST(ha.info_usuario->>'id' AS INTEGER)
+                        AND ha_sub.estado = 'pendiente'
+                        AND NOT EXISTS (
+                            SELECT 1 
+                            FROM historial_alumnos ha_sub_dup 
+                            WHERE ha_sub_dup.id_solicitud = ha_sub.id_solicitud 
+                            AND ha_sub_dup.id != ha_sub.id
+                        )
+                    ) as total_usuario_pendientes")
+                )
+                ->where('ha.estado','=','pendiente')
+                ->where('l.id_institucion','=',session('id_institucion'))
+                ->whereNotExists(function ($query) {
+                    $query->from('historial_alumnos as ha_dup')
+                        ->whereColumn('ha_dup.id_solicitud', 'ha.id_solicitud')
+                        ->where('ha_dup.id', '!=', DB::raw('ha.id'));
+                })
+                ->orderBy('ha.id','asc')
+                ->get()
+            ;
         }
     
-        return view('Paginas.perfil', compact('datos'));
+        return view('Paginas.perfil', compact('datos', 'historial'));
     })->name('perfil');
     
     Route::post('/perfil/cambiar-contrasena', [UsuarioController::class, 'actualizarContrasena']);

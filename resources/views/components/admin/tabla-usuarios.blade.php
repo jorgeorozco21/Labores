@@ -1,4 +1,4 @@
-@props(['usuarios'])
+@props(['usuarios', 'bloqueo'])
 
 <div class="bg-white rounded-[20px] border border-gray-100 shadow-sm overflow-hidden">
     <div class="overflow-x-auto no-scrollbar">
@@ -9,6 +9,7 @@
                     <th class="px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Nombre Completo</th>
                     <th class="px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Tipos de Usuario</th>
                     <th class="px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Grupo</th>
+                    <th class="px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Historial</th>
                     <th class="px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest text-center">Acciones</th>
                 </tr>
             </thead>
@@ -27,7 +28,7 @@
                         </td>
 
                         <!-- Nombre -->
-                        <td class="px-6 py-4 text-sm text-black font-medium">
+                        <td class="px-6 py-4 text-sm {{ (count(json_decode($usuario->historiales_pendientes)) >= $bloqueo->limite_bloqueo) ? 'text-red-600' : 'text-black' }} font-medium">
                             {{ $usuario->nombre }}
                         </td>
 
@@ -61,6 +62,19 @@
                             @else
                                 <span class="text-gray-300">Sin Grupo</span>
                             @endif
+                        </td>
+
+                        <td>
+                            <div class="flex justify-center">
+                                <button type="button" onclick="openHistorialModal({{ json_encode($usuario->historiales_pendientes) }}, {{ json_encode($usuario->historiales_recibidos) }})" 
+                                    class="flex items-center gap-2 text-[#7B1FA3] hover:text-white">
+                                    <div class="p-1.5 bg-purple-100 hover:bg-[#7B1FA3] rounded-lg">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                                        </svg>
+                                    </div>
+                                </button>
+                            </div>
                         </td>
 
                         <!-- Acciones -->
@@ -101,3 +115,98 @@
         {{ $usuarios->withQueryString()->links() }}
     </div>
 </div>
+
+<div id="historial-Modal" class="fixed inset-0 z-[100] hidden overflow-y-auto">
+    <div class="fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity" onclick="closeHistorialModal()"></div>
+    
+    <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+        <div class="relative w-full max-w-md bg-white rounded-[20px] shadow-2xl overflow-hidden transition-all duration-300">
+            <!-- Encabezado -->
+            <div class="bg-white px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+                <h3 class="text-sm font-extrabold text-black tracking-wider uppercase">Resportes</h3>
+            </div>
+
+            <!-- Lista de Materiales -->
+            <div class="px-6 py-6">
+                <ul id="historial-Lista" class="space-y-3"></ul>
+            </div>
+
+            <!-- Cerrar Material -->
+            <div class="bg-gray-50 px-6 py-4 flex justify-center">
+                <button type="button" onclick="closeHistorialModal()" 
+                    class="px-10 py-2 bg-[#7B1FA3] text-white text-xs font-bold rounded-2xl hover:bg-[#6A1B8E] transition-all shadow-lg shadow-purple-100 active:scale-[0.98]">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="auditoria-Modal" class="fixed inset-0 z-[100] hidden overflow-y-auto">
+    <div id="fondo-auditoria" class="fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity"></div>
+    
+    <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+        <div class="relative w-full max-w-md bg-white rounded-[20px] shadow-2xl overflow-hidden transition-all duration-300">
+            <!-- Encabezado -->
+            <div class="bg-white px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+                <h3 class="text-sm font-extrabold text-black tracking-wider uppercase">Auditoria</h3>
+            </div>
+
+            <!-- Lista de Materiales -->
+            <div class="px-6 py-6">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Correo</th>
+                            <th>Fecha</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="contenedor-auditoria">
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Cerrar Material -->
+            <div class="bg-gray-50 px-6 py-4 flex justify-center">
+                <button id="cerrar-auditoria" type="button" 
+                    class="px-10 py-2 bg-[#7B1FA3] text-white text-xs font-bold rounded-2xl hover:bg-[#6A1B8E] transition-all shadow-lg shadow-purple-100 active:scale-[0.98]">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openHistorialModal(pendientes, recibidos) {
+        const modal = document.getElementById('historial-Modal');
+        const lista = document.getElementById('historial-Lista');
+
+        pendientes = JSON.parse(pendientes);
+        recibidos = JSON.parse(recibidos);
+        
+        pendientes.forEach(h =>{
+            lista.innerHTML += `
+                <button class="historial" data-id="${h.id_solicitud}" class="text-black">${h.id_solicitud} ${h.descripcion}</button>
+            `;
+        });
+
+        recibidos.forEach(h =>{
+            lista.innerHTML += `
+                <button class="historial" data-id="${h.id_solicitud}" class="text-black">${h.id_solicitud} ${h.descripcion}</button>
+            `;
+        });
+
+        modal.classList.remove('hidden');
+        document.body.classList.add('overflow-hidden');
+    }
+
+    function closeHistorialModal() {
+        const modal = document.getElementById('historial-Modal');
+        modal.classList.add('hidden');
+        document.getElementById('historial-Lista').innerHTML = "";
+        document.body.classList.remove('overflow-hidden');
+    }
+</script>

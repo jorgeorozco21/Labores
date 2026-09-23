@@ -1,6 +1,6 @@
 <div class="flex flex-col md:flex-row justify-center items-stretch gap-8 mb-24 max-w-6xl mx-auto px-4">
 
-    @if (session('normal'))
+    @if (session('normal') && !session("bloqueado"))
         <a href="{{ route('activar.rol','normal') }}" class="block group w-full md:w-1/3">
             <div class="bg-white p-8 rounded-[32px] shadow-sm border border-gray-100 relative overflow-hidden hover:shadow-xl hover:shadow-purple-500/10 transition-all duration-300 h-full min-h-[430px] flex flex-col">
                 <div class="w-12 h-12 bg-gray-100 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-purple-50 transition-colors">
@@ -24,7 +24,7 @@
         </a>
     @endif
 
-    @if (session('encargado'))
+    @if (session('encargado') && !session("bloqueado"))
         <a href="{{ route('activar.rol','encargado') }}" class="block group w-full md:w-1/3">
             <div class="bg-white p-8 rounded-[32px] shadow-sm border border-gray-100 relative overflow-hidden hover:shadow-xl hover:shadow-purple-500/10 transition-all duration-300 h-full min-h-[430px] flex flex-col">
                 <div class="w-12 h-12 bg-gray-100 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-purple-50 transition-colors">

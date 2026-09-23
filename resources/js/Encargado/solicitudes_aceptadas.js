@@ -16,6 +16,13 @@ document.addEventListener('click', function(e){
         const id = btnCambiar.dataset.id;
         const estado = btnCambiar.dataset.estado;
 
+        console.log(id);
+
+        if (estado == "recibido"){
+            consultarInformacion(id, "completar");
+            return;
+        }
+
         if (confirm(`Deseas cambiar el estado de la solicitud ??`)){
             cambiarEstadoSolicitud(id, estado);
             buscador.value = '';
@@ -25,6 +32,126 @@ document.addEventListener('click', function(e){
     }
 
 });
+
+async function consultarInformacionSolicitudCompletar(id){
+    const response = await fetch(`/api/info-solictud-completar?id=${id}`);
+    const data = await response.json();
+
+    return data;
+}
+
+function modalCompletar(id ,materiales){
+    const contenedorLista = document.getElementById('material-lista-completar');
+    const idLabel = document.getElementById('id-solicitud-completar');
+
+    contenedorLista.innerHTML = '';
+    idLabel.innerText = '#' + id;
+
+    materiales.forEach(m =>{
+        const li = document.createElement('li');
+        li.className = "group flex items-center justify-between p-3.5 mb-2.5 bg-white hover:bg-[#F5F3FF] border-l-4 border-[#7B1FA3] rounded-r-xl border-gray-100 shadow-sm hover:shadow-md transition-all duration-200";
+        li.innerHTML = `
+            <input type="checkbox" class="entregado" value="${m.id}">
+            <div class="flex items-center gap-3.5 min-w-0">
+                <div class="min-w-0">
+                    <p class="text-sm font-bold text-gray-800 group-hover:text-[#7B1FA3] transition-colors truncate">
+                        ${m.nombre}
+                    </p>
+                </div>
+            </div>
+
+            <span class="shrink-0 ml-2 px-2.5 py-1 bg-purple-50 group-hover:bg-purple-100/70 text-[#7B1FA3] text-xs font-bold rounded-lg border border-purple-100 transition-colors">
+                ${m.cantidad}
+            </span>
+        `;
+        contenedorLista.appendChild(li);
+    });
+
+    document.getElementById("id-solicitud-completar").value = id;
+
+    document.getElementById("material-modal-completar").classList.remove("hidden");
+}
+
+function cerrarModalCompletar(){
+    document.getElementById("notas").value = "";
+    document.getElementById("id-solicitud-completar").value = "";
+    document.getElementById("notas").classList.add("hidden");
+    document.getElementById("label-notas").classList.add("hidden");
+    document.getElementById("material-modal-completar").classList.add("hidden");
+}
+
+document.getElementById("fondo-modal-completar").addEventListener("click", cerrarModalCompletar);
+document.getElementById("boton-cerrar-modal-completar").addEventListener("click", cerrarModalCompletar);
+
+document.getElementById("boton-completar").addEventListener("click", ()=>{
+    if (confirm('Deseas cambiar el estado del historial ??')){
+        const checkboxs = document.querySelectorAll(".entregado:checked");
+        const seleccionados = [];
+
+        checkboxs.forEach(c =>{
+            seleccionados.push(c.value);
+        });
+
+        if (checkboxs.length == document.querySelectorAll(".entregado").length){
+            crearHistorial(seleccionados);
+            return;
+        }
+
+        if (!document.getElementById("notas").classList.contains("hidden") && notas.value.trim() == ""){
+            alert("Tienes que indicar porque no todos los materiales estan marcados. En caso de presionar por error marca todos los materiales y vuelve a presionar el boton sin colocar notas.");
+            return;
+        }
+
+        if (!document.getElementById("notas").classList.contains("hidden") && notas.value.trim() != ""){
+            crearHistorial(seleccionados);
+            return;
+        }
+
+        if (checkboxs.length != document.querySelectorAll(".entregado").length){
+            document.getElementById("notas").classList.remove("hidden");
+            document.getElementById("label-notas").classList.remove("hidden");
+            return;
+        }
+    }
+});
+
+async function crearHistorial(seleccionados){
+    const informacion = await consultarInformacionSolicitudCompletar(document.getElementById("id-solicitud-completar").value);
+    const informacionUsuario = JSON.parse(informacion.info_usuario);
+    const datos = {
+        'id_solicitud': document.getElementById("id-solicitud-completar").value,
+        'info_usuario' : informacionUsuario,
+        'info_auditoria' : usuario,
+        'seleccionados' : seleccionados,
+        'notas' : document.getElementById("notas").value,
+        'estado' : 'recibido'
+    };
+
+    try{
+        const respuesta = await fetch('/usuario/encargado/actualizar-solicitudes',{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify(datos)
+        });
+
+        const resultado = await respuesta.json();
+
+        if (respuesta.ok){
+            cerrarModalCompletar();
+            buscador.value = '';
+            filtro.selectedIndex = 0;
+            buscadorGeneral();
+            alert("Solicitud actualizada correctamente");
+        }else{
+            alert(resultado.error);
+        }
+    }catch (error){
+        console.error("Error de conexión:", error);
+    }
+}
 
 async function cambiarEstadoSolicitud(id, estado){
     const datos = {
@@ -225,15 +352,20 @@ cerrar.addEventListener('click', function (){
 });
 
 buscar.addEventListener('click', function (){
-    consultarInformacion(document.getElementById('opciones-solicitudes').value);
+    consultarInformacion(document.getElementById('opciones-solicitudes').value, "reporte");
 });
 
-async function consultarInformacion(id){
+async function consultarInformacion(id, tipo){
     const response = await fetch(`/api/info-materiales-solicitud-prestamo?id=${id}`);
     const data = await response.json();
 
     idSolicitud = id;
     materiales = JSON.parse(data.info_material);
+
+    if (tipo == "completar"){
+        modalCompletar(id, materiales);
+        return;
+    }
 
     const opcionesMateriales = document.getElementById('opciones-materiales-reportar');
 

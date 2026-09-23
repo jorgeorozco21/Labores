@@ -126,7 +126,7 @@ botonEnviar.addEventListener("click", (e)=>{
 
     if (Object.keys(materiales).length == 0) alert('No puedes realizar una solicitud vacia');
     else{
-        if (cantidadSolicitudes + 1 > limiteSolicitudes){
+        if (cantidadSolicitudes + 1 > limiteSolicitudes && limiteSolicitudes != -1){
             alert('Alcanzaste el limite de solicitudes permitidas por usuario en este laboratorio.')
             return;
         }

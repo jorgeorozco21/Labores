@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Auditoria;
+use App\Models\HistorialAlumno;
 use App\Models\Solicitud;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -37,10 +38,48 @@ class AuditoriaController extends Controller
 
             $materiales = $solicitud->info_material;
 
-            foreach ($materiales as $m) {
-                DB::table('inventarios')
-                    ->where('id', $m['id'])
-                    ->increment('cantidad_disponible', $m['cantidad']);
+            if (count($materiales) == count($info['seleccionados'])){
+                foreach ($materiales as $m){
+                    DB::table('inventarios')
+                        ->where('id', $m['id'])
+                        ->increment('cantidad_disponible', $m['cantidad']);
+                }
+
+                $info = [
+                    'id_solicitud' => $info['id_solicitud'],
+                    'estado' => $info['estado'],
+                    'info_usuario' => $info['info_auditoria']
+                ];
+            }else{
+                $noSeleccionados = [];
+                $seleccionados = [];
+                foreach ($materiales as $m){
+                    if (in_array($m['id'], $info['seleccionados'])){
+                        DB::table('inventarios')
+                            ->where('id', $m['id'])
+                            ->increment('cantidad_disponible', $m['cantidad']);
+                        $seleccionados[] = $m;
+                    }else{
+                        $noSeleccionados[] = $m;
+                    }
+                }
+
+                Solicitud::where('id','=',$info['id_solicitud'])->update(['info_material' => $seleccionados]);
+
+                HistorialAlumno::create([
+                    'id_solicitud' => $info['id_solicitud'],
+                    'info_usuario' => $info['info_usuario'],
+                    'info_auditoria' => $info['info_auditoria'],
+                    'info_material' => $noSeleccionados,
+                    'estado' => 'pendiente',
+                    'descripcion' => $info['notas']
+                ]);
+
+                $info = [
+                    'id_solicitud' => $info['id_solicitud'],
+                    'estado' => $info['estado'],
+                    'info_usuario' => $info['info_auditoria']
+                ];
             }
         }
         

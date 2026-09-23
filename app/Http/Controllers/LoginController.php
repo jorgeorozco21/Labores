@@ -61,6 +61,33 @@ class LoginController extends Controller
             return redirect()->route('login.index')->with("error", 'Servicios de institucion no activos')->withInput();
         }
 
+        $historiales = 
+            DB::table('historial_alumnos as ha')
+            ->whereRaw("CAST(ha.info_usuario->>'id' AS INTEGER) = ?", [$usuario->id])
+            ->where('ha.estado','=','pendiente')
+            ->whereNotExists(function ($query) {
+                $query->from('historial_alumnos as ha_dup')
+                    ->whereColumn('ha_dup.id_solicitud', 'ha.id_solicitud')
+                    ->where('ha_dup.id', '!=', DB::raw('ha.id'));
+            })
+            ->count()
+        ;
+
+        $bloqueo =  
+            DB::table('configuracion_avanzada as ca')
+            ->select(
+                'ca.limite_bloqueo'
+            )
+            ->where('ca.id_institucion','=',$usuario->id_institucion)
+            ->first()
+        ;
+
+        if ($historiales >= $bloqueo->limite_bloqueo && $bloqueo->limite_bloqueo != -1){
+            session(["bloqueado" => true]);
+        }else{
+            session(["bloqueado" => false]);
+        }
+
         session([
             "id_usuario" => $usuario->id,
             "nombre_usuario" => $usuario->nombre_usuario,

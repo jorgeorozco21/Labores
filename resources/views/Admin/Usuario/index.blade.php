@@ -84,7 +84,7 @@
                 <x-admin.filtro-usuarios :grupos="$grupos" />
 
                 <!-- Tabla de Usuarios -->
-                <x-admin.tabla-usuarios :usuarios="$usuarios" />
+                <x-admin.tabla-usuarios :usuarios="$usuarios" :bloqueo="$bloqueo" />
             </div>
 
             <x-admin.opciones-borrado id="opciones-borrado" />

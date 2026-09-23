@@ -28,6 +28,10 @@
             <div class="flex-1 overflow-y-auto p-8 no-scrollbar space-y-8">
                 <!-- Componente Perfil -->
                 <x-paginas.campos-perfil :datos="$datos" />
+
+                @if (session("tipo") != "labores" && session('tipo') != "admin")
+                    <x-paginas.historial-alumno :historial="$historial" />
+                @endif
             </div>
         </main>
     </div>

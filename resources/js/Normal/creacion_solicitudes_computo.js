@@ -76,7 +76,7 @@ crear.addEventListener("click", function(){
         return;
     }
 
-    if (cantidadSolcitudes + 1 > limiteSolicitudes){
+    if (cantidadSolcitudes + 1 > limiteSolicitudes && limiteSolicitudes != -1){
         alert('Has alcanzado el limite de reportes permitidos');
         return;
     }

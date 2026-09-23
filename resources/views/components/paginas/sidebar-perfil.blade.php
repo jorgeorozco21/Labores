@@ -16,7 +16,7 @@
     </div>
 
     <nav class="flex-1 px-4 py-4 space-y-1 overflow-y-auto">
-        @if (session('normal'))
+        @if (session('normal') && !session("bloqueado"))
             <a href="{{ route('activar.rol','normal') }}" 
                 class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->is('/usuario/normal/laboratorios') ? 'bg-[#F5F3FF] text-[#7B1FA3]' : 'text-gray-500 hover:bg-gray-50 hover:text-gray-800' }}">
                 <div class="relative">
@@ -26,7 +26,7 @@
             </a>
         @endif
 
-        @if (session('encargado'))
+        @if (session('encargado') && !session("bloqueado"))
             <a href="{{ route('activar.rol','encargado') }}" 
                 class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->is('/usuario/encargado/solicitudes-pendientes') ? 'bg-[#F5F3FF] text-[#7B1FA3]' : 'text-gray-500 hover:bg-gray-50 hover:text-gray-800' }}">
                 <div class="relative">

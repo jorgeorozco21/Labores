@@ -47,7 +47,28 @@ class UsuarioController extends Controller
                 "g.nombre as nombreGrupo",
                 "g.grado",
                 "g.grupo",
-                "g.turno"
+                "g.turno",
+                DB::raw("(
+                    SELECT COALESCE(
+                        (SELECT json_agg(ha.*) 
+                        FROM historial_alumnos ha 
+                        WHERE CAST(ha.info_usuario->>'id' AS INTEGER) = u.id 
+                        AND ha.estado = 'pendiente'
+                        AND NOT EXISTS (
+                            SELECT 1 
+                            FROM historial_alumnos ha_dup 
+                            WHERE ha_dup.id_solicitud = ha.id_solicitud
+                            AND ha_dup.id != ha.id
+                        )), 
+                        '[]'::json
+                    )
+                ) as historiales_pendientes"),
+                DB::raw("(
+                    SELECT COALESCE(json_agg(ha_rec.*), '[]'::json)
+                    FROM historial_alumnos ha_rec 
+                    WHERE CAST(ha_rec.info_usuario->>'id' AS INTEGER) = u.id
+                    AND ha_rec.estado = 'recibido'
+                ) as historiales_recibidos")
             )
             ->where("u.id_institucion","=",session('id_institucion'))
             ->where("u.admin","!=","1")
@@ -76,8 +97,17 @@ class UsuarioController extends Controller
             ->orderBy('g.grupo', 'asc')
             ->get()
         ;
+        
+        $bloqueo =  
+            DB::table('configuracion_avanzada as ca')
+            ->select(
+                'ca.limite_bloqueo'
+            )
+            ->where('ca.id_institucion','=',session('id_institucion'))
+            ->first()
+        ;
 
-        return view('Admin.Usuario.index',compact('usuarios','grupos','admin'));
+        return view('Admin.Usuario.index',compact('usuarios','grupos','admin','bloqueo'));
     }
 
     /**
