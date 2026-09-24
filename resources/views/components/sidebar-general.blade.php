@@ -22,15 +22,6 @@
 
     <nav class="flex-1 px-4 py-4 space-y-1 overflow-y-auto">
         @if (request()->is('*encargado*'))
-            <p class="sidebar-text font-bold text-xs text-gray-400 uppercase tracking-wider pl-4 my-2 transition-all duration-300">Usuarios</p>
-            <a href="{{ url('/usuario/encargado/historial-alumno') }}" title="Solicitudes Pendientes"
-                class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->is('usuario/encargado/historial-alumno') ? 'bg-[#F5F3FF] text-[#7B1FA3]' : 'text-gray-500 hover:bg-gray-50 hover:text-gray-800' }}">
-                <svg class="w-5 h-5 shrink-0 {{ request()->is('usuario/encargado/historial-alumno') ? 'text-[#7B1FA3]' : 'text-gray-400 group-hover:text-gray-600' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 012-2h10a2 2 0 012 2M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
-                </svg>
-                <span class="sidebar-text text-sm font-semibold">Historial Usuarios</span>
-            </a>
-
             <p class="sidebar-text font-bold text-xs text-gray-400 uppercase tracking-wider pl-4 my-2 transition-all duration-300">Prestamos</p>
             <a href="{{ url('/usuario/encargado/solicitudes-pendientes') }}" title="Solicitudes Pendientes"
                 class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->is('usuario/encargado/solicitudes-pendientes') ? 'bg-[#F5F3FF] text-[#7B1FA3]' : 'text-gray-500 hover:bg-gray-50 hover:text-gray-800' }}">
@@ -39,7 +30,7 @@
                 </svg>
                 <span class="sidebar-text text-sm font-semibold">Solicitudes Pendientes</span>
             </a>
-
+        
             <a href="{{ url('/usuario/encargado/solicitudes-aceptadas') }}" title="Solicitudes Aceptadas"
                 class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->is('usuario/encargado/solicitudes-aceptadas') ? 'bg-[#F5F3FF] text-[#7B1FA3]' : 'text-gray-500 hover:bg-gray-50 hover:text-gray-800' }}">
                 <svg class="w-5 h-5 shrink-0 {{ request()->is('usuario/encargado/solicitudes-aceptadas') ? 'text-[#7B1FA3]' : 'text-gray-400 group-hover:text-gray-600' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -63,6 +54,15 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
                 <span class="sidebar-text text-sm font-semibold">Solicitudes Aceptadas</span>
+            </a>
+
+            <p class="sidebar-text font-bold text-xs text-gray-400 uppercase tracking-wider pl-4 my-2 transition-all duration-300">Usuarios</p>
+            <a href="{{ url('/usuario/encargado/historial-alumno') }}" title="Solicitudes Pendientes"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->is('usuario/encargado/historial-alumno') ? 'bg-[#F5F3FF] text-[#7B1FA3]' : 'text-gray-500 hover:bg-gray-50 hover:text-gray-800' }}">
+                <svg class="w-5 h-5 shrink-0 {{ request()->is('usuario/encargado/historial-alumno') ? 'text-[#7B1FA3]' : 'text-gray-400 group-hover:text-gray-600' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 012-2h10a2 2 0 012 2M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+                </svg>
+                <span class="sidebar-text text-sm font-semibold">Historial de Usuarios</span>
             </a>
 
             <p class="sidebar-text font-bold text-xs text-gray-400 uppercase tracking-wider pl-4 my-2 transition-all duration-300">Reportes</p>

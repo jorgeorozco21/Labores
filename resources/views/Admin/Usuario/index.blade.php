@@ -144,6 +144,7 @@
     </x-admin.modal-carga-masiva>
 
     <input type="hidden" id="nombre-tabla" value="usuarios">
+    <input type="hidden" id="limite-bloqueo" value="{{ $bloqueo->limite_bloqueo }}">
 
     @vite(['resources/js/Admin/crud_usuarios.js', 'resources/js/Admin/buscador_usuarios.js', 'resources/js/Admin/alertas.js', 'resources/js/Admin/modal.js', 'resources/js/Admin/boton_modales.js', 'resources/js/Admin/borrado_masivo.js'])
 </body>

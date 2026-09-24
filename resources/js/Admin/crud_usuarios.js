@@ -232,11 +232,17 @@ function openAuditoriaModal(data){
     data.forEach(a => {
         const info = JSON.parse(a.info_auditoria);
         tabla.innerHTML += `
-            <tr>
-                <th>${info.nombre}</td>
-                <td>${info.email}</td>
-                <td>${a.created_at}</td>
-                <td>${a.estado}</td>
+            <tr class="hover:bg-gray-50/50 transition-colors group">
+                <td class="px-6 py-4">
+                    <div class="flex items-center gap-3">
+                        <div>
+                            <p class="text-sm font-bold text-gray-800">${info.nombre}</p>
+                            <p class="text-xs text-gray-400">${info.email}</p>
+                        </div>
+                    </div>
+                </td>
+                <td class="px-6 py-4">${a.estado}</td>
+                <td class="px-6 py-4 text-center text-sm text-gray-500">${a.created_at}</td>
             </tr>
         `;
     });

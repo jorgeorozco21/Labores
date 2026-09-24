@@ -4,6 +4,7 @@ const contenedorInformacion = document.getElementById("informacion-filtrada");
 const buscador = document.getElementById("buscador");
 const filtroTipo = document.getElementById("filtrar-tipo");
 const filtroGrupo = document.getElementById("filtrar-grupo");
+const limite = document.getElementById("limite-bloqueo").value;
 
 import { funcionActiva } from "./borrado_masivo";
 import { ids } from "./borrado_masivo";
@@ -50,7 +51,7 @@ function generarRegistro(data){
                     </div>
                 </td>
 
-                <td class="px-6 py-4 text-sm text-gray-600 font-medium">
+                <td class="px-6 py-4 text-sm ${(usuario.historiales_pendientes.length >= limite && limite != -1) ? 'text-red-600' : 'text-black'} font-medium">
                     ${usuario.nombre}
                 </td>
 
@@ -68,7 +69,7 @@ function generarRegistro(data){
                     ${(usuario.nombreGrupo) ? `${usuario.grado}°${usuario.grupo} - ${usuario.nombreGrupo} - ${usuario.turno}` : 'Sin Grupo'}
                 </td>
 
-                <td>
+                <td class="px-6 py-4">
                     <div class="flex justify-center">
                         <button type="button" onclick='openHistorialModal(${JSON.stringify(usuario.historiales_pendientes || [])}, ${JSON.stringify(usuario.historiales_recibidos || [])})' 
                             class="flex items-center gap-2 text-[#7B1FA3] hover:text-white">

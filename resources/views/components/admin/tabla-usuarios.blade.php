@@ -9,7 +9,7 @@
                     <th class="px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Nombre Completo</th>
                     <th class="px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Tipos de Usuario</th>
                     <th class="px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Grupo</th>
-                    <th class="px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Historial</th>
+                    <th class="px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest text-center">Historial</th>
                     <th class="px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest text-center">Acciones</th>
                 </tr>
             </thead>
@@ -28,7 +28,7 @@
                         </td>
 
                         <!-- Nombre -->
-                        <td class="px-6 py-4 text-sm {{ (count(json_decode($usuario->historiales_pendientes)) >= $bloqueo->limite_bloqueo) ? 'text-red-600' : 'text-black' }} font-medium">
+                        <td class="px-6 py-4 text-sm {{ (count(json_decode($usuario->historiales_pendientes)) >= $bloqueo->limite_bloqueo && $bloqueo->limite_bloqueo != -1) ? 'text-red-600' : 'text-black' }} font-medium">
                             {{ $usuario->nombre }}
                         </td>
 
@@ -64,7 +64,7 @@
                             @endif
                         </td>
 
-                        <td>
+                        <td class="px-6 py-4">
                             <div class="flex justify-center">
                                 <button type="button" onclick="openHistorialModal({{ json_encode($usuario->historiales_pendientes) }}, {{ json_encode($usuario->historiales_recibidos) }})" 
                                     class="flex items-center gap-2 text-[#7B1FA3] hover:text-white">
@@ -123,7 +123,7 @@
         <div class="relative w-full max-w-md bg-white rounded-[20px] shadow-2xl overflow-hidden transition-all duration-300">
             <!-- Encabezado -->
             <div class="bg-white px-6 py-4 border-b border-gray-100 flex items-center justify-between">
-                <h3 class="text-sm font-extrabold text-black tracking-wider uppercase">Resportes</h3>
+                <h3 class="text-sm font-extrabold text-black tracking-wider uppercase">Reportes</h3>
             </div>
 
             <!-- Lista de Materiales -->
@@ -142,36 +142,34 @@
     </div>
 </div>
 
-<div id="auditoria-Modal" class="fixed inset-0 z-[100] hidden overflow-y-auto">
+<div id="auditoria-Modal" class="fixed inset-0 z-[150] hidden overflow-y-auto">
     <div id="fondo-auditoria" class="fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity"></div>
     
     <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
-        <div class="relative w-full max-w-md bg-white rounded-[20px] shadow-2xl overflow-hidden transition-all duration-300">
-            <!-- Encabezado -->
+        <div class="relative transform overflow-hidden rounded-[20px] bg-white text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-[750px]">
             <div class="bg-white px-6 py-4 border-b border-gray-100 flex items-center justify-between">
-                <h3 class="text-sm font-extrabold text-black tracking-wider uppercase">Auditoria</h3>
+                <h3 class="text-sm font-extrabold text-black tracking-wider uppercase">Auditoría</h3>
+                <p class="text-[14px] font-mono text-gray-400 bg-gray-50 px-2 py-1 rounded-md" id="id-auditoria">#</p>
             </div>
 
-            <!-- Lista de Materiales -->
-            <div class="px-6 py-6">
-                <table>
+            <div class="p-6 w-full overflow-x-auto no-scrollbar">
+                <table class="w-full text-left border-collapse min-w-[700px]">
                     <thead>
-                        <tr>
-                            <th>Nombre</th>
-                            <th>Correo</th>
-                            <th>Fecha</th>
-                            <th>Estado</th>
+                        <tr class="border-b border-gray-100 bg-gray-50/50">
+                            <th class="px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Nombre</th>
+                            <th class="px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest text-center">Fecha</th>
+                            <th class="px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest text-center">Estado</th>
                         </tr>
                     </thead>
-                    <tbody id="contenedor-auditoria">
+                    <tbody id="contenedor-auditoria" class="divide-y divide-gray-50">
                     </tbody>
                 </table>
             </div>
 
-            <!-- Cerrar Material -->
-            <div class="bg-gray-50 px-6 py-4 flex justify-center">
+            <!-- Botón de Cerrar -->
+            <div class="bg-gray-50 px-6 py-4 flex justify-center border-t border-gray-50">
                 <button id="cerrar-auditoria" type="button" 
-                    class="px-10 py-2 bg-[#7B1FA3] text-white text-xs font-bold rounded-2xl hover:bg-[#6A1B8E] transition-all shadow-lg shadow-purple-100 active:scale-[0.98]">
+                    class="px-10 py-2.5 bg-[#7B1FA3] text-white text-xs font-bold rounded-2xl hover:bg-[#6A1B8E] transition-all shadow-lg shadow-purple-100 active:scale-[0.98] cursor-pointer">
                     Cerrar
                 </button>
             </div>
@@ -186,18 +184,61 @@
 
         pendientes = JSON.parse(pendientes);
         recibidos = JSON.parse(recibidos);
-        
-        pendientes.forEach(h =>{
-            lista.innerHTML += `
-                <button class="historial" data-id="${h.id_solicitud}" class="text-black">${h.id_solicitud} ${h.descripcion}</button>
-            `;
-        });
 
-        recibidos.forEach(h =>{
-            lista.innerHTML += `
-                <button class="historial" data-id="${h.id_solicitud}" class="text-black">${h.id_solicitud} ${h.descripcion}</button>
-            `;
-        });
+        lista.innerHTML = '';
+
+        lista.innerHTML += `
+            <div class="mb-1">
+                <h4 class="text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 mb-1">
+                    Reportes Pendientes
+                </h4>
+            </div>
+        `;
+
+        if (pendientes.length === 0) {
+            lista.innerHTML += `<p class="text-xs text-gray-400 italic mb-4">No hay reportes pendientes.</p>`;
+        } else {
+            pendientes.forEach(h => {
+                lista.innerHTML += `
+                    <button type="button" data-id="${h.id_solicitud}" 
+                            class="historial w-full group inline-flex items-center gap-2 px-3 py-1.5 bg-purple-50 hover:bg-[#7B1FA3] text-[#7B1FA3] hover:text-white border border-purple-100 rounded-xl transition-all duration-200 cursor-pointer mb-2">
+                        <span class="px-1.5 py-0.5 text-[10px] font-extrabold bg-purple-200/60 group-hover:bg-white/20 text-[#7B1FA3] group-hover:text-white rounded-md transition-colors">
+                            #${h.id_solicitud}
+                        </span>
+                        <span class="text-xs font-bold">
+                            ${h.descripcion}
+                        </span>
+                    </button>
+                `;
+            });
+        }
+
+        lista.innerHTML += `
+            <hr class="border-gray-100 my-4">
+            <div class="mb-1">
+                <h4 class="text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 mb-1">
+                    Reportes Pasados
+                </h4>
+            </div>
+        `;
+
+        if (recibidos.length === 0) {
+            lista.innerHTML += `<p class="text-xs text-gray-400 italic">No hay reportes pasados.</p>`;
+        } else {
+            recibidos.forEach(h => {
+                lista.innerHTML += `
+                    <button type="button" data-id="${h.id_solicitud}" 
+                            class="historial w-full group inline-flex items-center gap-2 px-3 py-1.5 bg-green-50 hover:bg-green-600 text-green-600 hover:text-white border border-green-100 rounded-xl transition-all duration-200 cursor-pointer mb-2">
+                        <span class="px-1.5 py-0.5 text-[10px] font-extrabold bg-green-200/60 group-hover:bg-white/20 text-green-600 group-hover:text-white rounded-md transition-colors">
+                            #${h.id_solicitud}
+                        </span>
+                        <span class="text-xs font-bold">
+                            ${h.descripcion}
+                        </span>
+                    </button>
+                `;
+            });
+        }
 
         modal.classList.remove('hidden');
         document.body.classList.add('overflow-hidden');

@@ -1,48 +1,54 @@
 @props(['historial'])
 
 <div class="max-w-6xl mx-auto bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-    
-    <!-- Encabezado con Avatar/Badge -->
-    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-6 mb-8 border-b border-gray-100 gap-4">
+    <div class="flex flex-col pb-6 mb-8 border-b border-gray-100 gap-4">
         <div class="flex items-center gap-4">
             <div>
-                <h1 class="text-2xl font-black text-gray-800 tracking-tight">Historial de Usuario</h1>
+                <h2 class="text-2xl font-black text-gray-800 tracking-tight">Historial de Usuario</h1>
                 <p class="text-sm text-gray-500 font-medium">Reportes Pendientes</p>
             </div>
         </div>
 
-        @foreach ($historial['pendientes'] as $h)
-            <div class="flex justify-center">
+        <div class="flex flex-col items-left gap-3">
+            @foreach ($historial['pendientes'] as $h)
                 <button type="button" onclick="openMaterialModal({{ $h->id }}, {{ $h->info_material }})" 
-                    class="flex items-center gap-2 text-[#7B1FA3] hover:text-white">
-                    <div class="p-1.5 bg-purple-100 hover:bg-[#7B1FA3] rounded-lg">
-                        {{ $h->id }} {{  $h->descripcion }}
-                    </div>
+                        class="group inline-flex items-center gap-2 px-3 py-1.5 bg-purple-50 hover:bg-[#7B1FA3] text-[#7B1FA3] hover:text-white border border-purple-100 rounded-xl transition-all duration-200 cursor-pointer">
+
+                    <span class="px-1.5 py-0.5 text-[10px] font-extrabold bg-purple-200/60 group-hover:bg-white/20 text-[#7B1FA3] group-hover:text-white rounded-md transition-colors">
+                        #{{ $h->id }}
+                    </span>
+
+                    <span class="text-xs font-bold">
+                        {{ $h->descripcion }}
+                    </span>
                 </button>
-            </div>
-        @endforeach
+            @endforeach
+        </div>
     </div>
 
-
-    <!-- Encabezado con Avatar/Badge -->
-    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-6 mb-8 border-b border-gray-100 gap-4">
+    <div class="flex flex-col pb-6 mb-8 border-b border-gray-100 gap-4">
         <div class="flex items-center gap-4">
             <div>
-                <h1 class="text-2xl font-black text-gray-800 tracking-tight">Historial de Usuario</h1>
+                <h2 class="text-2xl font-black text-gray-800 tracking-tight">Historial de Usuario</h1>
                 <p class="text-sm text-gray-500 font-medium">Reportes Pasados</p>
             </div>
         </div>
 
-        @foreach ($historial['recibidos'] as $h)
-            <div class="flex justify-center">
+        <div class="flex flex-col items-lect gap-3">
+            @foreach ($historial['recibidos'] as $h)
                 <button type="button" onclick="openMaterialModal({{ $h->id }}, {{ $h->info_material }})" 
-                    class="flex items-center gap-2 text-[#7B1FA3] hover:text-white">
-                    <div class="p-1.5 bg-purple-100 hover:bg-[#7B1FA3] rounded-lg">
-                        {{ $h->id }} {{  $h->descripcion }}
-                    </div>
+                        class="group inline-flex items-center gap-2 px-3 py-1.5 bg-green-50 hover:bg-green-600 text-green-600 hover:text-white border border-green-100 rounded-xl transition-all duration-200 cursor-pointer">
+
+                    <span class="px-1.5 py-0.5 text-[10px] font-extrabold bg-green-200/60 group-hover:bg-white/20 text-green-600 group-hover:text-white rounded-md transition-colors">
+                        #{{ $h->id }}
+                    </span>
+
+                    <span class="text-xs font-bold">
+                        {{ $h->descripcion }}
+                    </span>
                 </button>
-            </div>
-        @endforeach
+            @endforeach
+        </div>
     </div>
 </div>
 

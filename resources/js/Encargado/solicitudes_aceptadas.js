@@ -49,21 +49,31 @@ function modalCompletar(id ,materiales){
 
     materiales.forEach(m =>{
         const li = document.createElement('li');
-        li.className = "group flex items-center justify-between p-3.5 mb-2.5 bg-white hover:bg-[#F5F3FF] border-l-4 border-[#7B1FA3] rounded-r-xl border-gray-100 shadow-sm hover:shadow-md transition-all duration-200";
+        li.className = "group mb-2.5 bg-white hover:bg-[#F5F3FF] border-l-4 border-[#7B1FA3] has-[:checked]:border-l-transparent rounded-r-xl border-gray-100 shadow-sm hover:shadow-md transition-all duration-200";
         li.innerHTML = `
-            <input type="checkbox" class="entregado" value="${m.id}">
-            <div class="flex items-center gap-3.5 min-w-0">
-                <div class="min-w-0">
-                    <p class="text-sm font-bold text-gray-800 group-hover:text-[#7B1FA3] transition-colors truncate">
-                        ${m.nombre}
-                    </p>
-                </div>
-            </div>
+            <label class="flex items-center justify-between p-3.5 cursor-pointer w-full">
+                <div class="flex items-center gap-3.5 min-w-0 flex-1 pr-2">
+                    <input type="checkbox" value="${m.id}" class="entregado peer hidden"> 
 
-            <span class="shrink-0 ml-2 px-2.5 py-1 bg-purple-50 group-hover:bg-purple-100/70 text-[#7B1FA3] text-xs font-bold rounded-lg border border-purple-100 transition-colors">
-                ${m.cantidad}
-            </span>
+                    <div class="w-5 h-5 border-2 border-gray-300 rounded-md flex items-center justify-center peer-checked:bg-[#7B1FA3] peer-checked:border-[#7B1FA3] transition-all shrink-0">
+                        <svg class="w-3 h-3 text-white peer-checked:scale-100 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M5 13l4 4L19 7" />
+                        </svg>
+                    </div>
+
+                    <div class="min-w-0 flex-1">
+                        <p class="text-sm font-bold text-gray-800 group-hover:text-[#7B1FA3] peer-checked:line-through peer-checked:text-gray-400 transition-colors truncate">
+                            ${m.nombre}
+                        </p>
+                    </div>
+                </div>
+
+                <span class="shrink-0 ml-2 px-2.5 py-1 bg-purple-50 group-hover:bg-purple-100/70 text-[#7B1FA3] text-xs font-bold rounded-lg border border-purple-100 transition-colors">
+                    ${m.cantidad}
+                </span>
+            </label>
         `;
+
         contenedorLista.appendChild(li);
     });
 

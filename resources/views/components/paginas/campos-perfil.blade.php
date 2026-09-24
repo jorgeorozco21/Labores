@@ -1,8 +1,6 @@
 @props(['datos'])
 
-<div class="max-w-6xl mx-auto bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-    
-    <!-- Encabezado con Avatar/Badge -->
+<div class="max-w-8xl mx-auto bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-6 mb-8 border-b border-gray-100 gap-4">
         <div class="flex items-center gap-4">
             <div>
@@ -13,7 +11,6 @@
     </div>
 
     @if (session('tipo') != "labores")
-        <!-- Sección 1: Datos Personales -->
         <div class="mb-6">
             <h2 class="text-sm font-bold text-[#7B1FA3] uppercase tracking-wider mb-4 flex items-center gap-2">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
@@ -76,7 +73,6 @@
         </div>
     @endif
 
-    <!-- Sección 2: Formulario Cambio de Contraseña -->
     <form method="POST" onsubmit="return confirm('¿Estás seguro de que deseas cambiar la contraseña?')" action="{{ url('/perfil/cambiar-contrasena') }}" 
         class="bg-gray-50/50 p-4 rounded-2xl border border-gray-100/80">
         @csrf

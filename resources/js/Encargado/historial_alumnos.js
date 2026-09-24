@@ -67,8 +67,12 @@ function generarRegistros(informacion){
                     ${h.id}
                 </td>
 
-                <td class="px-6 py-4 text-sm text-black text-center font-medium ${(h.total_usuario_pendientes >= limiteBloqueo) ? 'text-red-600' : 'text-black'}">
-                    ${h.total_usuario_pendientes}
+                <td class="px-6 py-4 text-center whitespace-nowrap">
+                    <div class="flex justify-center">
+                        <span class="inline-flex items-center justify-center p-1.5 max-w-[28px] max-h-[28px] text-xs font-bold rounded-lg transition-colors ${(h.total_usuario_pendientes >= limiteBloqueo && limiteBloqueo != -1) ? 'bg-red-100 text-red-600' : 'bg-purple-100 text-[#7B1FA3]'}">
+                            ${h.total_usuario_pendientes}
+                        </span>
+                    </div>
                 </td>
 
                 <!-- Laboratorio -->

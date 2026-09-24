@@ -1,6 +1,6 @@
 @props(['configuracion'])
 
-<div class="max-w-6xl mx-auto bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+<div class="max-w-8xl mx-auto bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
     
     <!-- Encabezado con Avatar/Badge -->
     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-6 mb-8 border-b border-gray-100 gap-4">
@@ -17,7 +17,10 @@
         {{ method_field('PUT') }}
 
         <div class="space-y-4">
-            <h2 class="text-sm font-bold text-[#7B1FA3] uppercase tracking-wider">Usuarios</h2>
+            <h2 class="text-sm font-bold text-[#7B1FA3] uppercase tracking-wider mb-4 flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                Usuarios
+            </h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div class="space-y-1.5">
                     <label for="bloquear-usuarios" class="block text-sm font-bold text-gray-600">Bloquear Usuarios</label>
@@ -27,15 +30,18 @@
         </div>
 
         <div class="space-y-4">
-            <h2 class="text-sm font-bold text-[#7B1FA3] uppercase tracking-wider">Solicitudes</h2>
+            <h2 class="text-sm font-bold text-[#7B1FA3] uppercase tracking-wider mb-4 flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                Solicitudes
+            </h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div class="space-y-1.5">
-                    <label for="prestamos" class="block text-sm font-bold text-gray-600">Limite de Solicitudes de Prestamos Simultaneas</label>
+                    <label for="prestamos" class="block text-sm font-bold text-gray-600">Limite de Solicitudes de Prestamos Permitidas</label>
                     <input name="limite_solicitudes_prestamos" type="text" id="prestamos" value="{{ ($configuracion->limite_solicitudes_prestamos == -1) ? 'Sin limite' : $configuracion->limite_solicitudes_prestamos }}" autocomplete="off" onfocus="convertirANumero(this)" onblur="convertirATexto(this)" class="w-full bg-gray-50/80 px-4 py-2.5 rounded-xl text-sm font-medium text-gray-800 border border-gray-200 focus:bg-white focus:border-[#7B1FA3] focus:ring-2 focus:ring-purple-100 focus:outline-none transition-all">
                 </div>
 
                 <div class="space-y-1.5">
-                    <label for="computo" class="block text-sm font-bold text-gray-600">Limite de Solicitudes de Computo Simultaneas</label>
+                    <label for="computo" class="block text-sm font-bold text-gray-600">Limite de Solicitudes de Computo Permitidas</label>
                     <input name="limite_solicitudes_computo" type="text" id="computo" value="{{ ($configuracion->limite_solicitudes_computo == -1) ? 'Sin limite' : $configuracion->limite_solicitudes_computo }}" autocomplete="off" onfocus="convertirANumero(this)" onblur="convertirATexto(this)" class="w-full bg-gray-50/80 px-4 py-2.5 rounded-xl text-sm font-medium text-gray-800 border border-gray-200 focus:bg-white focus:border-[#7B1FA3] focus:ring-2 focus:ring-purple-100 focus:outline-none transition-all">
                 </div>
             </div>

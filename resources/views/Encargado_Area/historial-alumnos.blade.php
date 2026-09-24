@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="csrf-token" content="{{ csrf_token() }}">
-        <title>Solicitudes Aceptadas</title>
+        <title>Historial de Alumnos</title>
         <script src="https://cdn.tailwindcss.com"></script>
         <link rel="icon" type="image/webp" href="{{ asset('images/logos/labores_icono_morado.webp') }}">
         <style>
@@ -29,7 +29,7 @@
                     </button>
 
                     <div>
-                        <h1 class="text-lg md:text-xl font-extrabold text-gray-800 leading-tight">Historial Alumnos</h1>
+                        <h1 class="text-lg md:text-xl font-extrabold text-gray-800 leading-tight">Historial de Alumnos</h1>
                         <p class="hidden sm:block text-[10px] text-gray-400 font-bold uppercase tracking-widest">
                             Administración de Historial de Alumnos
                         </p>

@@ -140,19 +140,19 @@
 
             <!-- Lista de Materiales -->
             <div class="px-6 py-6">
-                <ul id="material-lista-completar" class="space-y-3"></ul>
-                <label for="notas" id="label-notas" class="hidden text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Notas</label>
+                <ul id="material-lista-completar" class="space-y-3 mb-2"></ul>
+                <label for="notas" id="label-notas" class="hidden text-[10px] text-left font-bold text-gray-400 uppercase tracking-widest mb-1">Notas</label>
                 <textarea id="notas" class="hidden w-full max-h-32 px-4 py-2 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:border-[#7B1FA3] transition-all" autocomplete="off"></textarea>
             </div>
 
             <!-- Cerrar Material -->
-            <div class="bg-gray-50 px-6 py-4 flex justify-center">
+            <div class="bg-gray-50 px-6 py-4 flex justify-center gap-4">
                 <button id="boton-cerrar-modal-completar" type="button"
-                    class="px-10 py-2 bg-[#7B1FA3] text-white text-xs font-bold rounded-2xl hover:bg-[#6A1B8E] transition-all shadow-lg shadow-purple-100 active:scale-[0.98]">
+                    class="px-10 py-2 bg-red-600 text-white text-xs font-bold rounded-2xl hover:bg-red-700 transition-all shadow-lg shadow-purple-100 active:scale-[0.98]">
                     Cerrar
                 </button>
                 <button id="boton-completar" type="button"
-                    class="px-10 py-2 bg-[#7B1FA3] text-white text-xs font-bold rounded-2xl hover:bg-[#6A1B8E] transition-all shadow-lg shadow-purple-100 active:scale-[0.98]">
+                    class="px-10 py-2 bg-green-600 text-white text-xs font-bold rounded-2xl hover:bg-green-700 transition-all shadow-lg shadow-purple-100 active:scale-[0.98]">
                     Completar
                 </button>
             </div>
