@@ -241,7 +241,11 @@ function openAuditoriaModal(data){
                         </div>
                     </div>
                 </td>
-                <td class="px-6 py-4">${a.estado}</td>
+                <td class="px-6 py-4 text-center">
+                    <span class="px-3 py-1 text-[10px] text-center font-bold rounded-lg bg-green-50 text-green-600 border border-green-100 uppercase">
+                        ${a.estado}
+                    </span>
+                </td>
                 <td class="px-6 py-4 text-center text-sm text-gray-500">${a.created_at}</td>
             </tr>
         `;

@@ -16,7 +16,7 @@
             
             <tbody id="informacion-filtrada" class="divide-y divide-gray-50">
                 @foreach ($usuarios as $usuario)
-                    <tr class="hover:bg-gray-50/50 transition-colors group">
+                    <tr class="{{ ($bloqueo->limite_bloqueo != -1 && count(json_decode($usuario->historiales_pendientes)) >= $bloqueo->limite_bloqueo) ? 'bg-red-50 hover:bg-red-100/60' : 'hover:bg-gray-50/50' }} transition-colors group">
                         <td class="px-6 py-4">
                             <div class="flex items-center gap-3">
                                 <!-- Nombre de Usuario y Correo -->
@@ -28,7 +28,7 @@
                         </td>
 
                         <!-- Nombre -->
-                        <td class="px-6 py-4 text-sm {{ (count(json_decode($usuario->historiales_pendientes)) >= $bloqueo->limite_bloqueo && $bloqueo->limite_bloqueo != -1) ? 'text-red-600' : 'text-black' }} font-medium">
+                        <td class="px-6 py-4 text-sm {{ ($bloqueo->limite_bloqueo != -1 && count(json_decode($usuario->historiales_pendientes)) >= $bloqueo->limite_bloqueo) ? 'text-red-600' : 'text-black' }} font-medium">
                             {{ $usuario->nombre }}
                         </td>
 
