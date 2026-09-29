@@ -21,6 +21,7 @@ export default defineConfig({
                 'resources/js/Encargado/solicitudes_aceptadas.js',
                 'resources/js/Encargado/solicitudes_pendientes_computo.js',
                 'resources/js/Encargado/solicitudes_pendientes.js',
+                'resources/js/Encargado/historial_alumnos.js',
                 'resources/js/Admin/alertas.js',
                 'resources/js/Admin/analisis_de_datos.js',
                 'resources/js/Admin/borrado_masivo.js',
@@ -39,7 +40,12 @@ export default defineConfig({
                 'resources/js/Admin/laboratorios_informes.js',
                 'resources/js/Admin/materiales.js',
                 'resources/js/Admin/modal.js',
-                'resources/js/Admin/reportes.js'
+                'resources/js/Admin/reportes.js',
+                'resources/js/Admin_Labores/buscador_instituciones.js',
+                'resources/js/Admin_Labores/buscador_usuarios.js',
+                'resources/js/Admin_Labores/crud_instituciones.js',
+                'resources/js/Admin_Labores/crud_usuarios.js',
+                'resources/js/Admin_Labores/modales.js'
             ],
             refresh: true,
         }),
