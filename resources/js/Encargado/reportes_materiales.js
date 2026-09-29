@@ -103,15 +103,17 @@ function generarRegistros(informacion){
         if (r.estado == 'reparado'){
             registros += `
                     <td class="px-6 py-4 text-center">
-                        <span class="px-2 py-1 bg-orange-50 text-orange-700 text-xs font-bold rounded-lg border border-green-100 uppercase">
-                            ${r.estado}
-                        </span>
+                        <div class="flex justify-center">
+                            <span class="px-3 py-1 bg-orange-50 text-orange-600 text-[10px] font-bold rounded-lg border border-orange-100 uppercase">
+                                ${r.estado}
+                            </span>
 
-                        <button data-id='${r.id}' data-estado='recibido' data-inventario='${r.id_inventario}' data-cantidad='${r.cantidad}'
-                            class="completar p-2 bg-[#7B1FA3] text-white rounded-xl hover:bg-[#6A1B8E] transition-all shadow-lg shadow-purple-100 active:scale-[0.98]"
-                            title="Guardar cambio">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                        </button>
+                            <button data-id='${r.id}' data-estado='recibido' data-inventario='${r.id_inventario}' data-cantidad='${r.cantidad}'
+                                class="completar px-3 py-1 bg-[#7B1FA3] text-white rounded-xl hover:bg-[#6A1B8E] transition-all shadow-lg shadow-purple-100 active:scale-[0.98] ml-2"
+                                title="Guardar cambio">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            </button>
+                        </div>
                     </td>
                     <td>
                         <div class="flex justify-center">
