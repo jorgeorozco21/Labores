@@ -20,4 +20,9 @@ class Computadora extends Model
     public function laboratorio(){
         return $this->belongsTo(Laboratorio::class, 'id_laboratorio');
     }
+
+    public function especificacionesComputo()
+    {
+        return $this->hasMany(EspecificacionComputo::class, 'id_computadora');
+    }
 }

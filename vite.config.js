@@ -31,7 +31,6 @@ export default defineConfig({
                 'resources/js/Admin/buscador_laboratorios.js',
                 'resources/js/Admin/buscador_materiales.js',
                 'resources/js/Admin/buscador_usuarios.js',
-                'resources/js/Admin/computadoras.js',
                 'resources/js/Admin/crud_grupos.js',
                 'resources/js/Admin/crud_inventario.js',
                 'resources/js/Admin/crud_laboratorios.js',

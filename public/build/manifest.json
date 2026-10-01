@@ -77,12 +77,6 @@
       "resources/js/Admin/borrado_masivo.js"
     ]
   },
-  "resources/js/Admin/computadoras.js": {
-    "file": "assets/computadoras-CdRj5IQ9.js",
-    "name": "computadoras",
-    "src": "resources/js/Admin/computadoras.js",
-    "isEntry": true
-  },
   "resources/js/Admin/crud_grupos.js": {
     "file": "assets/crud_grupos-DdzwNPfL.js",
     "name": "crud_grupos",

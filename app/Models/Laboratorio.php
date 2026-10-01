@@ -39,4 +39,8 @@ class Laboratorio extends Model
     public function grupoLaboratorio(){
         return $this->hasMany(GrupoLaboratorio::class, 'id_laboratorio');
     }
+
+    public function plantillaComputo(){
+        return $this->hasMany(PlantillaComputo::class, 'id_laboratorio');
+    }
 }
