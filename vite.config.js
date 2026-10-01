@@ -36,7 +36,6 @@ export default defineConfig({
                 'resources/js/Admin/crud_laboratorios.js',
                 'resources/js/Admin/crud_materiales.js',
                 'resources/js/Admin/crud_usuarios.js',
-                'resources/js/Admin/laboratorios_informes.js',
                 'resources/js/Admin/materiales.js',
                 'resources/js/Admin/modal.js',
                 'resources/js/Admin/reportes.js',

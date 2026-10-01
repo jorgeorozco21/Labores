@@ -652,55 +652,8 @@ Route::middleware('check.login')->group(function (){
 
         Route::get('/archivo-usuarios', [UsuarioController::class, 'archivoCarga']);
 
-        Route::get('/admin/informes/laboratorios', function (){
-            $admin = 
-                DB::table('usuarios as u')
-                ->select(
-                    'u.nombre_usuario',
-                    'u.email'
-                )
-                ->where('u.id','=',session('id_usuario'))
-                ->first()
-            ;
-
-            $laboratorios = 
-                DB::table('laboratorios as l')
-                ->select(
-                    'l.id',
-                    'l.nombre',
-                    'l.tipo'
-                )
-                ->where('l.id_institucion','=',session('id_institucion'))
-                ->get()
-            ;
-
-            return view('Admin.Informes.laboratorios', compact('admin','laboratorios'));
-        });
-
-        Route::get('/admin/informes/laboratorios/buscador', function (Illuminate\Http\Request $request){
-            $query = 
-                DB::table("laboratorios as l")
-                ->select(
-                    "l.id",
-                    "l.nombre",
-                    "l.tipo"
-                )
-                ->where("l.nombre","ilike","%".$request->texto."%")
-                ->orderBy('l.tipo', 'asc')
-                ->orderBy('l.nombre', 'asc')
-            ;
-
-            if ($request->tipo != "Sin Filtro"){
-                $query->where("l.tipo","=",$request->tipo);
-            }
-
-            $query->where("l.id_institucion","=",session("id_institucion"));
-
-            $query->orderBy('l.tipo', 'asc')->orderBy('l.nombre', 'asc');
-
-            $laboratorios = $query->get();
-
-            return response()->json($laboratorios);
+        Route::get('/admin/informes/laboratorios', function(){
+            return view('Admin.Informes.laboratorios');
         });
 
         Route::get('/admin/informes/laboratorios/{id}-laboratorio-computo/computadoras', function($id){

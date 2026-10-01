@@ -107,12 +107,6 @@
     "src": "resources/js/Admin/crud_usuarios.js",
     "isEntry": true
   },
-  "resources/js/Admin/laboratorios_informes.js": {
-    "file": "assets/laboratorios_informes-CfmlvHr9.js",
-    "name": "laboratorios_informes",
-    "src": "resources/js/Admin/laboratorios_informes.js",
-    "isEntry": true
-  },
   "resources/js/Admin/materiales.js": {
     "file": "assets/materiales-9duWF4of.js",
     "name": "materiales",

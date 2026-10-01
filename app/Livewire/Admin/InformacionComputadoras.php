@@ -39,11 +39,13 @@ class InformacionComputadoras extends Component
     public $especificacionesComputadora = [];
     public $especificacionesEditadas = [];
 
+    // Asignacion variable global
     public function mount($id)
     {
         $this->id = $id;
     }
 
+    // Mandamos informacion que necesita la vista inicialmente y incluye el funcionamiento de los buscadores
     public function render()
     {
         $admin = 
@@ -76,11 +78,11 @@ class InformacionComputadoras extends Component
             ->where('c.id_laboratorio','=',$this->id)
             ->when($this->buscador, function($query) {
                 $query->where(function($q) {
-                    $q->where('c.numero_computadora', 'like', '%' . $this->buscador . '%');
+                    $q->where('c.numero_computadora','ilike','%'.$this->buscador.'%');
                 });
             })
             ->when($this->filtro && $this->filtro !== 'Sin Filtro', function($query) {
-                $query->where('c.estado', '=', $this->filtro);
+                $query->where('c.estado','=',$this->filtro);
             })
             ->orderBy('c.id','ASC')
             ->get()
@@ -93,6 +95,7 @@ class InformacionComputadoras extends Component
         ]);
     }
 
+    // Modal de reportes
     public function cerrarModalReportes()
     {
         $this->modalReportes = false;
@@ -122,6 +125,7 @@ class InformacionComputadoras extends Component
         $this->modalReportes = true;
     }
 
+    // Modal de Auditoria
     public function cerrarModalAuditoria()
     {
         $this->modalAuditorias = false;
@@ -146,6 +150,7 @@ class InformacionComputadoras extends Component
         $this->modalAuditorias = true;
     }
 
+    // Funciones relaciondas con las creacion de plantillas
     public function plantillas()
     {
         $this->cargarEspecificaciones();
@@ -215,6 +220,7 @@ class InformacionComputadoras extends Component
         session()->flash('success', '¡Especificación borrar correctamente!');
     }
 
+    // Mostrar las especificaciones ya creadas
     public function cargarEspecificaciones()
     {
         $this->plantillasCreadas = DB::table('plantillas_computo as pc')
@@ -237,6 +243,7 @@ class InformacionComputadoras extends Component
         $this->modalPlantilla = false;
     }
 
+    /// Modlas de especificaciones
     public function especificaciones($idComputadora, $numeroComputadora)
     {
         $this->computadoraSeleccionada = $numeroComputadora;
@@ -289,6 +296,7 @@ class InformacionComputadoras extends Component
         $this->modalEspecificaciones = false;
     }
 
+    // Cambiar el estatus del equipo de computo
     public function cambiarEstado($idComputadora)
     {
         $computadora = Computadora::findOrFail($idComputadora);
@@ -300,6 +308,7 @@ class InformacionComputadoras extends Component
         session()->flash('success', '¡El estado de la computadora se ha actualizado correctamente!');
     }
 
+    // Cuando se remplaza el equipo de computo con sus respectivas operaciones
     public function reemplazarComputadora($idComputadora)
     {
         $computadora = Computadora::findOrFail($idComputadora);
@@ -315,6 +324,7 @@ class InformacionComputadoras extends Component
         session()->flash('success', '¡Computadora remplazada correctamente!');
     }
 
+    // Agregar un nuevo equipo de computo
     public function crearNuevaComputadora()
     {
         $total = DB::table('computadoras')
@@ -340,6 +350,7 @@ class InformacionComputadoras extends Component
         session()->flash('success', '¡Computadora agregada correctamente!');
     }
 
+    // Funcion de exportacion de informacion a treves del excel
     public function exportarComputadoras()
     {
         $laboratorio = 
