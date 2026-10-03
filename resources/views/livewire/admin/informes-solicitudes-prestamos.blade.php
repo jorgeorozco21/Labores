@@ -1,5 +1,4 @@
-<div wire:poll.10s class="flex h-screen overflow-hidden">
-    @include('alertas-normales')
+<div class="flex h-screen overflow-hidden">
     <!-- Sidebar -->
     @include('admin.sidebar-admin', ['admin' => $admin])
     <main class="flex-1 flex flex-col min-w-0 overflow-hidden">
@@ -20,15 +19,15 @@
             </div>
 
             <div class="flex relative gap-2 text-left">
-                @include('admin.boton-modal-plantilla', ['modalPlantilla' => $modalPlantilla])
-                @include('admin.boton-nueva-computadora')
-                @include('admin.boton-exportar-excel', ['nombreFuncion' => 'exportarComputadoras', 'title' => 'Exportar Informes de Computadoras'])
+                <a href="{{ url('/admin/informes-reportes/laboratorios/'.$laboratorio->id.'-laboratorio-normal') }}"
+                    class="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium text-white bg-[#7B1FA3] hover:bg-[#6A1B8E] active:scale-95 transition-colors">Reportes</a>
+                @include('admin.boton-exportar-excel', ['nombreFuncion' => 'exportarSolicitudes', 'title' => 'Exportar Informes de Materiales'])
             </div>
         </header>
 
-        <div class="flex-1 overflow-y-auto p-6 no-scrollbar space-y-6">
-            @include('components.admin.filtro-computadoras')
-            @include('components.admin.tabla-computadoras', ['computadoras' => $computadoras, 'modalReportes' => $modalReportes, 'modalAuditorias' => $modalAuditorias])
+        <div class="flex-1 overflow-y-auto p-8 no-scrollbar space-y-8">
+            @include('admin.filtro-informes-materiales', ['materiales' => $materiales, 'tipo' => 'Solicitud'])
+            @include('admin.tabla-informes-materiales', ['solicitudes' => $solicitudes, 'modalAuditorias' => $modalAuditorias, 'modalMateriales' => $modalMateriales])
         </div>
     </main>
 </div>

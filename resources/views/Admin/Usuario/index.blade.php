@@ -47,8 +47,6 @@
                 <div class="relative flex gap-2 text-left" id="dropdown-container">
                     <x-admin.boton-agregar id="btn-dropdown" />
 
-                    <x-admin.boton-exportar-excel route="admin.usuarios.exportarUsuarios" title="Exportar Usuarios" />
-
                     <x-admin.boton-eliminar id="borrar-algunos" />
 
                     <x-admin.menu-desplegable id="dropdown-menu">

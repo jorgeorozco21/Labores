@@ -107,22 +107,10 @@
     "src": "resources/js/Admin/crud_usuarios.js",
     "isEntry": true
   },
-  "resources/js/Admin/materiales.js": {
-    "file": "assets/materiales-9duWF4of.js",
-    "name": "materiales",
-    "src": "resources/js/Admin/materiales.js",
-    "isEntry": true
-  },
   "resources/js/Admin/modal.js": {
     "file": "assets/modal-C5xykMjz.js",
     "name": "modal",
     "src": "resources/js/Admin/modal.js",
-    "isEntry": true
-  },
-  "resources/js/Admin/reportes.js": {
-    "file": "assets/reportes-CeeGVERv.js",
-    "name": "reportes",
-    "src": "resources/js/Admin/reportes.js",
     "isEntry": true
   },
   "resources/js/Encargado/reportes_materiales.js": {
