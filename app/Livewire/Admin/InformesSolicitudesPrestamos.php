@@ -44,7 +44,8 @@ class InformesSolicitudesPrestamos extends Component
             DB::table('laboratorios as l')
             ->select(
                 'l.id',
-                'l.nombre'
+                'l.nombre',
+                'l.tipo'
             )
             ->where('l.id','=',$this->id)
             ->first()

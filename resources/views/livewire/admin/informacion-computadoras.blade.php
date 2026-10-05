@@ -20,6 +20,12 @@
             </div>
 
             <div class="flex relative gap-2 text-left">
+                @if ($laboratorio->tipo == 'mixto')
+                    <a href="{{ url('/admin/informes/laboratorios/'.$laboratorio->id.'-laboratorio-normal') }}"
+                    class="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium text-white bg-[#7B1FA3] hover:bg-[#6A1B8E] active:scale-95 transition-colors">Materiales</a>
+                    <a href="{{ url('/admin/informes-reportes/laboratorios/'.$laboratorio->id.'-laboratorio-normal') }}"
+                    class="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium text-white bg-[#7B1FA3] hover:bg-[#6A1B8E] active:scale-95 transition-colors">Reportes</a>
+                @endif
                 @include('admin.boton-modal-plantilla', ['modalPlantilla' => $modalPlantilla])
                 @include('admin.boton-nueva-computadora')
                 @include('admin.boton-exportar-excel', ['nombreFuncion' => 'exportarComputadoras', 'title' => 'Exportar Informes de Computadoras'])

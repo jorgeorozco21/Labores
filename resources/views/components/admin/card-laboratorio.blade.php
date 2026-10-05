@@ -5,6 +5,7 @@
             @php
                 $url = match($laboratorio->tipo) {
                     'prestamos' => url('/admin/informes/laboratorios/'.$laboratorio->id.'-laboratorio-normal'),
+                    'mixto' => url('/admin/informes/laboratorios/'.$laboratorio->id.'-laboratorio-normal'),
                     'computo' => url('/admin/informes/laboratorios/'.$laboratorio->id.'-laboratorio-computo/computadoras'),
                     default => '#'
                 };

@@ -393,57 +393,8 @@ Route::middleware('check.login')->group(function (){
             return response()->json($auditoria);
         });
 
-        Route::get('/admin/laboratorios/exportar-laboratorios', [LaboratorioController::class, 'exportarLaboratorios'])->name('admin.laboratorios.exportarLaboratorios');
-
-        Route::resource('/admin/laboratorios', LaboratorioController::class)->names('admin.laboratorios');
-
-        Route::get('/api/laboratorios', function(Illuminate\Http\Request $request){
-
-            $query = 
-                DB::table("laboratorios as l")
-                ->select(
-                    "l.id",
-                    "l.nombre",
-                    "l.tipo",
-                    DB::raw('(SELECT COUNT(*) FROM computadoras 
-                    WHERE id_laboratorio = l.id 
-                    AND estado = \'activo\') as cantidad_computadoras')
-                )
-                ->where("l.nombre","ilike","%".$request->texto."%")
-                ->orderBy('l.tipo', 'asc')
-                ->orderBy('l.nombre', 'asc')
-            ;
-
-            if ($request->tipo != "Sin Filtro"){
-                $query->where("l.tipo","=",$request->tipo);
-            }
-
-            $query->where("l.id_institucion","=",session("id_institucion"));
-
-            $query->orderBy('l.tipo', 'asc')->orderBy('l.nombre', 'asc');
-
-            $laboratorios = $query->paginate(40);
-
-            return response()->json($laboratorios);
-        });
-
-        Route::get('/api/laboratorios/editar', function (Illuminate\Http\Request $request){
-
-            $laboratorio = 
-                DB::table("laboratorios as l")
-                ->select(
-                    "l.id",
-                    "l.nombre",
-                    "l.tipo",
-                    DB::raw('(SELECT COUNT(*) FROM computadoras 
-                    WHERE id_laboratorio = l.id 
-                    AND estado = \'activo\') as cantidad_computadoras')
-                )
-                ->where("l.id","=",$request->id)
-                ->first()
-            ;
-
-            return response()->json($laboratorio);
+        Route::get('/admin/laboratorios', function(){
+            return view('Admin.Laboratorios.index');
         });
 
         Route::get('/admin/grupos/exportar-grupos', [GrupoController::class, 'exportarGrupos'])->name('admin.grupos.exportarGrupos');
@@ -637,8 +588,6 @@ Route::middleware('check.login')->group(function (){
         });
 
         Route::post('/carga-usuario', [CargaUsuariosController::class, 'cargaMasivaUsuarios']);
-
-        Route::post('/carga-laboratorio', [CargaLaboratoriosController::class, 'cargaMasivaLaboratorios']);
 
         Route::post('/carga-materiales', [CargaMaterialesController::class, 'cargaMasivaMateriales']);
 

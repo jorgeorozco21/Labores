@@ -42,7 +42,7 @@ class DatosLaboratoriosExport implements FromCollection, WithTitle, WithEvents
                                 ->setShowDropDown(true)
                                 ->setErrorTitle('Dato no válido')
                                 ->setError('Por favor, selecciona una opción de la lista.')
-                                ->setFormula1('"prestamos,computo"');
+                                ->setFormula1('"prestamos,computo,mixto"');
 
                     $hoja->getCell("B{$fila}")->setDataValidation($validarTipo);
 

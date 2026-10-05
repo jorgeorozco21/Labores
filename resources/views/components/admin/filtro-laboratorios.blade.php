@@ -18,6 +18,7 @@
         <select wire:model.live="filtro" id="filtrar-tipo" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 rounded-xl text-sm focus:outline-none focus:border-[#7B1FA3] appearance-none cursor-pointer">
             <option value="Sin Filtro">Tipo</option>
             <option value="prestamos">Laboratorio de Prestamos</option>
+            <option value="mixto">Laboratorio Mixto</option>
             <option value="computo">Laboratorio de Computo</option>
         </select>
     </div>

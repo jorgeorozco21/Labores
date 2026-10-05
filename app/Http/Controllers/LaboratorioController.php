@@ -16,7 +16,7 @@ class LaboratorioController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    /*public function index()
     {
         $admin = 
             DB::table('usuarios as u')
@@ -46,7 +46,7 @@ class LaboratorioController extends Controller
         ;
 
         return view('Admin.Laboratorios.index', compact('laboratorios','admin'));
-    }
+    }*/
 
     /**
      * Show the form for creating a new resource.

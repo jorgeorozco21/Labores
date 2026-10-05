@@ -1,4 +1,4 @@
-@props(['laboratorios'])
+@props(['laboratorios', 'opcionesBorrado'])
 <div class="bg-white rounded-[20px] border border-gray-100 shadow-sm overflow-hidden">
     <div class="overflow-x-auto no-scrollbar">
         <table class="w-full text-left border-collapse min-w-[800px]">
@@ -21,23 +21,22 @@
                         <td class="px-6 py-4 text-sm text-black font-medium text-center">{{ $laboratorio->cantidad_computadoras }}</td>
                         <td class="px-6 py-4">
                             <div class="flex items-center justify-center gap-2">
-                                <div class="seleccionar-registro hidden">
-                                    <input type="checkbox" value="{{ $laboratorio->id }}" class="check-borrar">
-                                </div>
-                                <div class="acciones flex items-center justify-center gap-2">
-                                    <!-- Editar -->
-                                    <button class="abrir-modal-edit p-2 text-gray-400 hover:text-blue-500 transition-colors" data-id="{{ $laboratorio->id }}">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
-                                    </button>
-                                    <!-- Eliminar -->
-                                    <form action="{{ url('/admin/laboratorios/'.$laboratorio->id) }}" method="post" class="inline">
-                                        @csrf
-                                        {{ method_field('DELETE') }}
-                                        <button type="submit" value="Borrar" class="p-2 text-gray-400 hover:text-red-500 transition-colors" onclick="return confirm('Deseas borra el laboratorio ??')">
+                                @if ($opcionesBorrado)
+                                    <div class="seleccionar-registro">
+                                        <input type="checkbox" wire:model.live="idsSeleccionados" value="{{ $laboratorio->id }}" class="check-borrar">
+                                    </div>
+                                @else
+                                    <div class="acciones flex items-center justify-center gap-2">
+                                        <!-- Editar -->
+                                        <button wire:click="editar({{ $laboratorio->id }})" class="p-2 text-gray-400 hover:text-blue-500 transition-colors">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+                                        </button>
+                                        <!-- Eliminar -->
+                                        <button wire:click="eliminar({{ $laboratorio->id }})" wire:confirm="¿Estás seguro de que deseas eliminar este laboratorio y toda su informacion relacionada?" value="Borrar" class="p-2 text-gray-400 hover:text-red-500 transition-colors">
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                                         </button>
-                                    </form>
-                                </div>
+                                    </div>
+                                @endif
                             </div>
                         </td>
                     </tr>

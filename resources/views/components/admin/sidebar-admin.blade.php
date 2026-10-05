@@ -476,6 +476,13 @@
         inicializarSidebar
     );
 
+    document.addEventListener('livewire:initialized', ()=>{
+        Livewire.hook('morph.updated', ({ el, component })=>{
+            colapsado = localStorage.getItem('sidebarColapsado') === 'true';
+            inicializarSidebar();
+        });
+    });
+
     inicializarSidebar();
 })();
 </script>
