@@ -20,7 +20,7 @@
 </head>
 <body class="h-full overflow-hidden bg-[#F7F6F8]">
 
-    @livewire('admin.informes-solicitudes-prestamos', ['id' => $id])
+    @livewire('informes-solicitudes-prestamos', ['id' => $id])
 
     @livewireScripts
 </body>

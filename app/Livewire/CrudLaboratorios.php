@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Admin;
+namespace App\Livewire;
 
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -20,6 +20,7 @@ class CrudLaboratorios extends Component
     use WithFileUploads, HasBorradoMasivo;
     
     // Globales
+    public $admin;
     public $buscador = '';
     public $filtro = 'Sin Filtro';
 
@@ -28,19 +29,19 @@ class CrudLaboratorios extends Component
     public $nombreLaboratorio;
     public $tipoLaboratorio;
     public $cantidadComputadoras;
-    public $esEditar = false;
-
+    
     // Modal formulario
     public $modalFormulario = false;
+    public $esEditar = false;
 
     // Modal carga masiva
     public $archivo;
     public $modalCargaMasiva = false;
     public $erroresExcel = [];
 
-    public function render()
+    public function mount()
     {
-        $admin = 
+        $this->admin = 
             DB::table('usuarios as u')
             ->select(
                 'u.nombre_usuario',
@@ -49,7 +50,10 @@ class CrudLaboratorios extends Component
             ->where('u.id','=',session('id_usuario'))
             ->first()
         ;
+    }
 
+    public function render()
+    {
         $laboratorios = 
             DB::table("laboratorios as l")
             ->select(
@@ -74,8 +78,7 @@ class CrudLaboratorios extends Component
             ->paginate(40)
             ->withQueryString();
         ;
-        return view('livewire.admin.crud-laboratorios', [
-            'admin' => $admin,
+        return view('livewire.crud-laboratorios', [
             'laboratorios' => $laboratorios
         ]);
     }

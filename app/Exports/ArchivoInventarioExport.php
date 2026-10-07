@@ -14,7 +14,6 @@ class ArchivoInventarioExport implements WithMultipleSheets, WithEvents
         return [
             "Datos" => new DatosInventarioExport(),
             "Materiales" => new MaterialesInventarioExport(),
-            "Laboratorios" => new LaboratoriosInventarioExport()
         ];
     }
 

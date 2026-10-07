@@ -5,7 +5,6 @@ use App\Http\Controllers\AuditoriaController;
 use App\Http\Controllers\AuditoriaComputoController;
 use App\Http\Controllers\AuditoriaReporteMaterialController;
 use App\Http\Controllers\CargaInventarioController;
-use App\Http\Controllers\CargaLaboratoriosController;
 use App\Http\Controllers\CargaMaterialesController;
 use App\Http\Controllers\CargaUsuariosController;
 use App\Http\Controllers\ComputadoraController;
@@ -512,92 +511,17 @@ Route::middleware('check.login')->group(function (){
             return response()->json($materiales);
         });
 
+        Route::get('/admin/inventario', function(){
+            return view('Admin.Inventario.index');
+        })->name('admin.inventario');
+
         Route::get('/admin/inventario/exportar-inventario', [InventarioController::class, 'exportarInventario'])->name('admin.inventario.exportarInventario');
-
-        Route::resource('/admin/inventario', InventarioController::class)->names('admin.inventario');
-
-        Route::get('/api/inventario/editar', function (Illuminate\Http\Request $request){
-            $datos["inventario"] = 
-                DB::table("inventarios as i")
-                ->select(
-                    "i.id",
-                    "i.id_material",
-                    "i.id_laboratorio",
-                    "i.cantidad_disponible",
-                    "i.cantidad_total"
-                )
-                ->where("i.id","=",$request->id)
-                ->first()
-            ;
-
-            $datos["materiales"] = 
-                DB::table("materiales as m")
-                ->select(
-                    "m.id",
-                    "m.nombre"
-                )
-                ->where("m.id_institucion","=",session("id_institucion"))
-                ->orderBy("m.nombre","ASC")
-                ->orderBy("m.created_at","DESC")
-                ->get()
-            ;
-
-            $datos["laboratorios"] = 
-                DB::table("laboratorios as l")
-                ->select(
-                    "l.id",
-                    "l.nombre"
-                )
-                ->where('l.id_institucion',"=",session("id_institucion"))
-                ->where("l.tipo","=","prestamos")
-                ->orderBy("l.nombre","ASC")
-                ->orderBy("l.created_at","DESC")
-                ->get()
-            ;
-
-            return response()->json($datos);
-        });
-
-        Route::get('/api/inventario', function (Illuminate\Http\Request $request){
-
-            $query = 
-                DB::table("inventarios as i")
-                ->join("materiales as m","m.id","=","i.id_material")
-                ->join("laboratorios as l","l.id","=","i.id_laboratorio")
-                ->select(
-                    "i.id",
-                    "m.nombre as nombreMaterial",
-                    "i.cantidad_total",
-                    "i.cantidad_disponible",
-                    "l.nombre as nombreLaboratorio"
-                )
-                ->where("m.nombre","ilike","%".$request->texto."%")
-            ;
-
-            if ($request->filtro != "Sin Filtro"){
-                $query->where("i.id_laboratorio","=",$request->filtro);
-            }
-
-            $query->where("l.id_institucion","=",session("id_institucion"));
-
-            $query->orderBy("l.nombre","ASC")->orderBy("m.nombre","ASC")->orderBy("i.created_at","DESC");
-
-            $inventarios = $query->paginate(40);
-
-            return response()->json($inventarios);
-        });
 
         Route::post('/carga-usuario', [CargaUsuariosController::class, 'cargaMasivaUsuarios']);
 
         Route::post('/carga-materiales', [CargaMaterialesController::class, 'cargaMasivaMateriales']);
 
-        Route::post('/carga-inventario', [CargaInventarioController::class, 'cargaMasivaInventario']);
-
-        Route::get('/archivo-inventario', [InventarioController::class, 'archivoCarga']);
-
         Route::get('/archivo-materiales', [MaterialController::class, 'archivoCarga']);
-
-        Route::get('/archivo-laboratorios', [LaboratorioController::class, 'archivoCarga']);
 
         Route::get('/archivo-usuarios', [UsuarioController::class, 'archivoCarga']);
 
@@ -607,6 +531,10 @@ Route::middleware('check.login')->group(function (){
 
         Route::get('/admin/informes/laboratorios/{id}-laboratorio-computo/computadoras', function($id){
             return view('Admin.Informes.informacion_computadoras', compact('id'));
+        });
+
+        Route::get('/admin/informes-inventario/laboratorios/{id}-laboratorio-normal', function($id){
+            return view('Admin.Informes.inventarios', compact('id'));
         });
 
         Route::get('/admin/informes/laboratorios/{id}-laboratorio-normal', function($id){

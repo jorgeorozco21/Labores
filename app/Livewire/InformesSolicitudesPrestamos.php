@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Admin;
+namespace App\Livewire;
 
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
@@ -11,6 +11,9 @@ class InformesSolicitudesPrestamos extends Component
 {
     // Globales
     public $id;
+    public $admin;
+    public $laboratorio;
+    public $materiales;
     public $solicitudSeleccionada = null;
     public $buscador = '';
     public $filtro = '';
@@ -26,11 +29,8 @@ class InformesSolicitudesPrestamos extends Component
     public function mount($id)
     {
         $this->id = $id;
-    }
 
-    public function render()
-    {
-        $admin = 
+        $this->admin = 
             DB::table('usuarios as u')
             ->select(
                 'u.nombre_usuario',
@@ -40,7 +40,7 @@ class InformesSolicitudesPrestamos extends Component
             ->first()
         ;
 
-        $laboratorio = 
+        $this->laboratorio = 
             DB::table('laboratorios as l')
             ->select(
                 'l.id',
@@ -51,6 +51,20 @@ class InformesSolicitudesPrestamos extends Component
             ->first()
         ;
 
+        $this->materiales = 
+            DB::table('inventarios as i')
+            ->join('materiales as m','m.id','=','i.id_material')
+            ->select(
+                'i.id',
+                'm.nombre'
+            )
+            ->where('i.id_laboratorio','=',$this->id)
+            ->get()
+        ;
+    }
+
+    public function render()
+    {
         $solicitudes = 
             DB::table('solicitudes as s')
             ->select(
@@ -82,22 +96,8 @@ class InformesSolicitudesPrestamos extends Component
             ->get()
         ;
 
-        $materiales = 
-            DB::table('inventarios as i')
-            ->join('materiales as m','m.id','=','i.id_material')
-            ->select(
-                'i.id',
-                'm.nombre'
-            )
-            ->where('i.id_laboratorio','=',$this->id)
-            ->get()
-        ;
-        
-        return view('livewire.admin.informes-solicitudes-prestamos', [
-            'admin' => $admin,
-            'laboratorio' => $laboratorio,
-            'solicitudes' => $solicitudes,
-            'materiales' => $materiales
+        return view('livewire.informes-solicitudes-prestamos', [
+            'solicitudes' => $solicitudes
         ]);
     }
 

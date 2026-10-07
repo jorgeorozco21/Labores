@@ -19,7 +19,7 @@
     </head>
     <body class="h-full bg-[#F7F6F8]">
 
-        @livewire('admin.laboratorios-informes')
+        @livewire('laboratorios-informes')
 
         @livewireScripts
     </body>

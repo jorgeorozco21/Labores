@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Admin;
+namespace App\Livewire;
 
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
@@ -14,6 +14,8 @@ class InformacionComputadoras extends Component
 {
     // Globales
     public $id;
+    public $admin;
+    public $laboratorio;
     public $buscador = '';
     public $filtro = '';
     public $computadoraSeleccionada = null;
@@ -43,12 +45,8 @@ class InformacionComputadoras extends Component
     public function mount($id)
     {
         $this->id = $id;
-    }
 
-    // Mandamos informacion que necesita la vista inicialmente y incluye el funcionamiento de los buscadores
-    public function render()
-    {
-        $admin = 
+        $this->admin = 
             DB::table('usuarios as u')
             ->select(
                 'u.nombre_usuario',
@@ -58,7 +56,7 @@ class InformacionComputadoras extends Component
             ->first()
         ;
 
-        $laboratorio = 
+        $this->laboratorio = 
             DB::table('laboratorios as l')
             ->select(
                 'l.id',
@@ -68,7 +66,11 @@ class InformacionComputadoras extends Component
             ->where('l.id','=',$this->id)
             ->first()
         ;
+    }
 
+    // Mandamos informacion que necesita la vista inicialmente y incluye el funcionamiento de los buscadores
+    public function render()
+    {
         $computadoras = 
             DB::table('computadoras as c')
             ->select(
@@ -89,9 +91,7 @@ class InformacionComputadoras extends Component
             ->get()
         ;
 
-        return view('livewire.admin.informacion-computadoras', [
-            'admin' => $admin,
-            'laboratorio' => $laboratorio,
+        return view('livewire.informacion-computadoras', [
             'computadoras' => $computadoras
         ]);
     }

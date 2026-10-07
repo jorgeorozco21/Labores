@@ -23,6 +23,8 @@
                     <a href="{{ url('/admin/informes/laboratorios/'.$laboratorio->id.'-laboratorio-computo/computadoras') }}"
                         class="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium text-white bg-[#7B1FA3] hover:bg-[#6A1B8E] active:scale-95 transition-colors">Computadoras</a>
                 @endif
+                <a href="{{ url('/admin/informes-inventario/laboratorios/'.$laboratorio->id.'-laboratorio-normal') }}"
+                    class="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium text-white bg-[#7B1FA3] hover:bg-[#6A1B8E] active:scale-95 transition-colors">Inventarios</a>
                 <a href="{{ url('/admin/informes-reportes/laboratorios/'.$laboratorio->id.'-laboratorio-normal') }}"
                     class="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium text-white bg-[#7B1FA3] hover:bg-[#6A1B8E] active:scale-95 transition-colors">Reportes</a>
                 @include('admin.boton-exportar-excel', ['nombreFuncion' => 'exportarSolicitudes', 'title' => 'Exportar Informes de Materiales'])

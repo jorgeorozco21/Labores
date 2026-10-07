@@ -59,9 +59,5 @@
     </x-admin.modal-nuevo>
 
     <!-- Modal de Carga Masiva -->
-    <x-admin.modal-carga-masiva subtitulo="Importar Laboratorios" nombreFuncion="ejecutarCarga" nombreFuncionCerrar="cerrarCargaMasiva"  modalCargaMasiva="{{ $modalCargaMasiva }}">
-        @include('Admin.Laboratorios.carga_masiva_laboratorios')
-    </x-admin.modal-carga-masiva>
-
-    <input type="hidden" id="nombre-tabla" value="laboratorios">
+    <x-admin.modal-carga-masiva subtitulo="Importar Laboratorios" nombreFuncion="ejecutarCarga" nombreFuncionCerrar="cerrarCargaMasiva"  modalCargaMasiva="{{ $modalCargaMasiva }}" />
 </div>

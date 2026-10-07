@@ -11,12 +11,14 @@ use Maatwebsite\Excel\Concerns\WithChunkReading;
 
 class InformacionInventarioExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSize, WithChunkReading
 {
-    protected $idInstitucion;
+    protected $id;
+    protected $tipo;
 
     // Recibimos el ID de la institución por el constructor para evitar usar session() directo aquí
-    public function __construct($idInstitucion)
+    public function __construct($tipo, $id)
     {
-        $this->idInstitucion = $idInstitucion;
+        $this->tipo = $tipo;
+        $this->id = $id;
     }
 
     public function chunkSize(): int
@@ -29,6 +31,9 @@ class InformacionInventarioExport implements FromQuery, WithHeadings, WithMappin
     */
     public function query()
     {
+        $columna = '';
+        if ($this->tipo == 'institucion') $columna = 'l.id_institucion';
+        else $columna = 'i.id_laboratorio';
         return DB::table('inventarios as i')
             ->join('laboratorios as l','l.id','=','i.id_laboratorio')
             ->join('materiales as m','m.id','=','i.id_material')
@@ -38,7 +43,7 @@ class InformacionInventarioExport implements FromQuery, WithHeadings, WithMappin
                 'i.cantidad_disponible',
                 'i.cantidad_total'
             )
-            ->where('l.id_institucion', '=', $this->idInstitucion)
+            ->where($columna,'=',$this->id)
             ->orderBy('l.nombre','asc')
             ->orderBy('m.nombre','asc');
     }

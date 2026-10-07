@@ -1,20 +1,20 @@
 <?php
 
-namespace App\Livewire\Admin;
+namespace App\Livewire;
 
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 
 class LaboratoriosInformes extends Component
 {
+    // Globales
+    public $admin;
     public $buscador = '';
     public $filtro = 'Sin Filtro';
 
-    // Mandamos informacion que necesita la vista inicialmente y incluye el funcionamiento de los buscadores
-    public function render()
+    public function mount()
     {
-
-        $admin = 
+        $this->admin = 
             DB::table('usuarios as u')
             ->select(
                 'u.nombre_usuario',
@@ -23,7 +23,11 @@ class LaboratoriosInformes extends Component
             ->where('u.id','=',session('id_usuario'))
             ->first()
         ;
+    }
 
+    // Mandamos informacion que necesita la vista inicialmente y incluye el funcionamiento de los buscadores
+    public function render()
+    {
         $laboratorios = 
             DB::table('laboratorios as l')
             ->select(
@@ -45,8 +49,7 @@ class LaboratoriosInformes extends Component
             ->get()
         ;
 
-        return view('livewire.admin.laboratorios-informes', [
-            'admin' => $admin,
+        return view('livewire.laboratorios-informes', [
             'laboratorios' => $laboratorios
         ]);
     }

@@ -18,7 +18,7 @@ class LaboratoriosInventarioExport implements FromCollection, WithTitle
     */
     public function collection()
     {
-        return Laboratorio::where('id_institucion','=',session('id_institucion'))->where('tipo','=',"prestamos")->get()->map(function ($laboratorio){
+        return Laboratorio::where('id_institucion','=',session('id_institucion'))->whereIn('tipo', ['prestamos', 'mixto'])->get()->map(function ($laboratorio){
             return [
                 'id' => $laboratorio->id,
                 'nombre' => $laboratorio->nombre

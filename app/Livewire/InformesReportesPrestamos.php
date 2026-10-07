@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Admin;
+namespace App\Livewire;
 
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
@@ -11,6 +11,9 @@ class InformesReportesPrestamos extends Component
 {
     // Globales
     public $id;
+    public $admin;
+    public $laboratorio;
+    public $materiales;
     public $buscador = '';
     public $filtro = '';
     public $reporteSeleccionado = null;
@@ -26,11 +29,8 @@ class InformesReportesPrestamos extends Component
     public function mount($id)
     {
         $this->id = $id;
-    }
 
-    public function render()
-    {
-        $admin = 
+        $this->admin = 
             DB::table('usuarios as u')
             ->select(
                 'u.nombre_usuario',
@@ -40,7 +40,7 @@ class InformesReportesPrestamos extends Component
             ->first()
         ;
 
-        $laboratorio = 
+        $this->laboratorio = 
             DB::table('laboratorios as l')
             ->select(
                 'l.id',
@@ -51,7 +51,7 @@ class InformesReportesPrestamos extends Component
             ->first()
         ;
 
-        $materiales = 
+        $this->materiales = 
             DB::table('inventarios as i')
             ->join('materiales as m','m.id','=','i.id_material')
             ->select(
@@ -61,7 +61,10 @@ class InformesReportesPrestamos extends Component
             ->where('i.id_laboratorio','=',$this->id)
             ->get()
         ;
+    }
 
+    public function render()
+    {
         $reportes = 
             DB::table('reportes_materiales as r')
             ->join('inventarios as i','i.id','=','r.id_inventario')
@@ -92,10 +95,7 @@ class InformesReportesPrestamos extends Component
             ->get()
         ;
 
-        return view('livewire.admin.informes-reportes-prestamos', [
-            'admin' => $admin,
-            'laboratorio' => $laboratorio,
-            'materiales' => $materiales,
+        return view('livewire.informes-reportes-prestamos', [
             'reportes' => $reportes
         ]);
     }

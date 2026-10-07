@@ -38,7 +38,7 @@
                         </button>
                     </div>
                     <form wire:submit.prevent="{{ $nombreFuncion }}" class="space-y-4">
-                        {{ $slot }}
+                        @include('admin.input-carga-masiva')
                     </form>
                 </div>
             </div>

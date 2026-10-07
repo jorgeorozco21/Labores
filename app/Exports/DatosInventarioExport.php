@@ -19,7 +19,7 @@ class DatosInventarioExport implements FromCollection, WithEvents, WithTitle
     public function collection()
     {
         return collect([
-            ["id_material","cantidad_total","id_laboratorio"]
+            ["id_material","cantidad_total"]
         ]);
     }
 
@@ -36,10 +36,8 @@ class DatosInventarioExport implements FromCollection, WithEvents, WithTitle
                 $id_institucion = session('id_institucion');
 
                 $cantMateriales = Material::where("id_institucion", $id_institucion)->count();
-                $cantLabs = Laboratorio::where("id_institucion", $id_institucion)->count();
 
                 $primerMaterial = Material::where("id_institucion", $id_institucion)->orderBy('id')->value('nombre');
-                $primerLab = Laboratorio::where("id_institucion", $id_institucion)->orderBy('id')->value('nombre');
 
                 $valMat = new DataValidation();
                 $valMat->setType(DataValidation::TYPE_LIST)
@@ -51,38 +49,23 @@ class DatosInventarioExport implements FromCollection, WithEvents, WithTitle
                     ->setError('Selecciona un material de la lista.')
                     ->setFormula1("='Materiales'!\$B\$1:\$B\${$cantMateriales}");
 
-                $valLab = new DataValidation();
-                $valLab->setType(DataValidation::TYPE_LIST)
-                    ->setErrorStyle(DataValidation::STYLE_STOP)
-                    ->setAllowBlank(true)                
-                    ->setShowErrorMessage(true)                 
-                    ->setShowDropDown(true)
-                    ->setErrorTitle('Laboratorio no válido')
-                    ->setError('Selecciona un laboratorio de la lista.')
-                    ->setFormula1("='Laboratorios'!\$B\$1:\$B\${$cantLabs}");
-
                 for ($fila = 2; $fila <= 1000; $fila++) {
                     $hoja->getCell("A{$fila}")->setDataValidation($valMat);
-                    $hoja->getCell("C{$fila}")->setDataValidation($valLab);
 
-                    if ($primerMaterial) {
+                    if ($primerMaterial){
                         $hoja->setCellValue("A{$fila}", $primerMaterial);
-                    }
-                    if ($primerLab) {
-                        $hoja->setCellValue("C{$fila}", $primerLab);
                     }
                 }
 
                 $hoja->getColumnDimension('A')->setWidth(40); // Ancho de 30 para la columna A
                 $hoja->getColumnDimension('B')->setAutoSize(true); // Auto-ajuste para la columna B
-                $hoja->getColumnDimension('C')->setWidth(40); // Ancho de 40 para la columna C
                 
                 // 1. Configurar la protección
                 $proteccion = $hoja->getProtection();
                 $proteccion->setSheet(true); 
 
-                // 3. Desbloquear el rango de entrada de datos (A2:C1000)
-                $hoja->getStyle('A2:C1000')->getProtection()->setLocked(Protection::PROTECTION_UNPROTECTED);
+                // 3. Desbloquear el rango de entrada de datos (A2:B1000)
+                $hoja->getStyle('A2:B1000')->getProtection()->setLocked(Protection::PROTECTION_UNPROTECTED);
             }
         ];
     }
