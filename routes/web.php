@@ -4,15 +4,11 @@ use App\Http\Controllers\AnalisisDatosController;
 use App\Http\Controllers\AuditoriaController;
 use App\Http\Controllers\AuditoriaComputoController;
 use App\Http\Controllers\AuditoriaReporteMaterialController;
-use App\Http\Controllers\CargaInventarioController;
-use App\Http\Controllers\CargaMaterialesController;
 use App\Http\Controllers\CargaUsuariosController;
 use App\Http\Controllers\ComputadoraController;
 use App\Http\Controllers\GrupoController;
 use App\Http\Controllers\InventarioController;
 use App\Http\Controllers\InstitucionesController;
-use App\Http\Controllers\LaboratorioController;
-use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ReporteMaterialController;
@@ -465,51 +461,9 @@ Route::middleware('check.login')->group(function (){
             return response()->json($grupos);
         });
 
-        Route::get('/admin/materiales/exportar-materiales', [MaterialController::class, 'exportarMateriales'])->name('admin.materiales.exportarMateriales');
-
-        Route::resource('/admin/materiales', MaterialController::class)->names('admin.materiales');
-
-        Route::get('/api/materiales/editar', function (Illuminate\Http\Request $request){
-
-            $material = 
-                DB::table("materiales as m")
-                ->select(
-                    "m.id",
-                    "m.nombre",
-                    "m.descripcion",
-                    "m.tipo"
-                )
-                ->where("m.id","=",$request->id)
-                ->first()
-            ;
-
-            return response()->json($material);
-        });
-
-        Route::get('/api/materiales', function (Illuminate\Http\Request $request){
-
-            $query = 
-                DB::table("materiales as m")
-                ->select(
-                    "m.id",
-                    "m.nombre",
-                    "m.descripcion",
-                    "m.tipo"
-                )
-                ->where("m.nombre","ilike","%".$request->texto."%")
-                ->where("m.id_institucion","=",session("id_institucion"))
-            ;
-
-            if ($request->filtro != "Sin Filtro"){
-                $query->where("m.tipo","=",$request->filtro);
-            }
-
-            $query->orderBy("m.nombre","ASC")->orderBy("m.created_at","DESC");
-
-            $materiales = $query->paginate(40);
-
-            return response()->json($materiales);
-        });
+        Route::get('/admin/materiales', function(){
+            return view('Admin.Materiales.index');
+        })->name('admin.materiales');
 
         Route::get('/admin/inventario', function(){
             return view('Admin.Inventario.index');
@@ -518,10 +472,6 @@ Route::middleware('check.login')->group(function (){
         Route::get('/admin/inventario/exportar-inventario', [InventarioController::class, 'exportarInventario'])->name('admin.inventario.exportarInventario');
 
         Route::post('/carga-usuario', [CargaUsuariosController::class, 'cargaMasivaUsuarios']);
-
-        Route::post('/carga-materiales', [CargaMaterialesController::class, 'cargaMasivaMateriales']);
-
-        Route::get('/archivo-materiales', [MaterialController::class, 'archivoCarga']);
 
         Route::get('/archivo-usuarios', [UsuarioController::class, 'archivoCarga']);
 

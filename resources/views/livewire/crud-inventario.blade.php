@@ -67,7 +67,7 @@
     </main>
 
     <!-- Modal Crear Inventario  -->
-    <x-admin.modal-nuevo titulo="Registrar Inventario" nombreFuncion="guardar" modalFormulario="{{ $modalFormulario }}" esEditar="{{ $esEditar }}">
+    <x-admin.modal-nuevo titulo="Inventario" nombreFuncion="guardar" modalFormulario="{{ $modalFormulario }}" esEditar="{{ $esEditar }}">
         @include('Admin.Inventario.form')
     </x-admin.modal-nuevo>
     

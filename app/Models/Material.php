@@ -17,7 +17,8 @@ class Material extends Model
     protected $fillable = [
         "nombre",
         "descripcion",
-        "tipo",
+        "tipo_prestamo",
+        "tipo_devolucion",
         "id_institucion"
     ];
 

@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string("nombre");
             $table->text("descripcion");
-            $table->string("tipo");
+            $table->string("tipo_prestamo");
+            $table->string("tipo_devolucion");
             $table->unsignedBigInteger("id_institucion");
             $table->timestamps();
 

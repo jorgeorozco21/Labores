@@ -33,11 +33,15 @@ class InformacionMaterialesExport implements FromQuery, WithHeadings, WithMappin
             ->select(
                 'm.nombre',
                 'm.descripcion',
-                'm.tipo',
+                'm.tipo_prestamo',
+                'm.tipo_devolucion'
             )
             ->where('m.id_institucion', '=', $this->idInstitucion)
-            ->orderBy('m.tipo', 'asc')
-            ->orderBy('m.nombre', 'asc');
+            ->orderBy("m.tipo_prestamo","ASC")
+            ->orderBy("m.tipo_devolucion","ASC")
+            ->orderBy("m.nombre","ASC")
+            ->orderBy("m.created_at","DESC")
+        ;
     }
 
     /**
@@ -49,6 +53,7 @@ class InformacionMaterialesExport implements FromQuery, WithHeadings, WithMappin
             'Nombre del Material',
             'Descripción',
             'Tipo de Prestamo',
+            'Tipo de Devolucion'
         ];
     }
 
@@ -62,7 +67,8 @@ class InformacionMaterialesExport implements FromQuery, WithHeadings, WithMappin
         return [
             $material->nombre,
             $material->descripcion,
-            $material->tipo,
+            $material->tipo_prestamo,
+            $material->tipo_devolucion
         ];
     }
 }

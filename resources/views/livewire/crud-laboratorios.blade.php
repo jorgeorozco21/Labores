@@ -54,7 +54,7 @@
     </main>
 
     <!-- Modal para crear  -->
-    <x-admin.modal-nuevo titulo="Registrar Laboratorio" nombreFuncion="guardar" modalFormulario="{{ $modalFormulario }}" esEditar="{{ $esEditar }}">
+    <x-admin.modal-nuevo titulo="Laboratorio" nombreFuncion="guardar" modalFormulario="{{ $modalFormulario }}" esEditar="{{ $esEditar }}">
         @include('Admin.Laboratorios.form', ['esEditar' => $esEditar])
     </x-admin.modal-nuevo>
 

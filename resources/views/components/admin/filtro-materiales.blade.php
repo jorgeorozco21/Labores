@@ -8,7 +8,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                 </svg>
             </span>
-            <input type="text" id="buscador" placeholder="Nombre" autocomplete="off"
+            <input type="text" wire:model.live.debounce.300ms="buscador" id="buscador" placeholder="Nombre" autocomplete="off"
                 class="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#7B1FA3]/10 focus:border-[#7B1FA3] transition-all">
         </div>
     </div>
@@ -16,10 +16,20 @@
     <!-- Tipos de Prestamo -->
     <div class="w-full md:w-64">
         <label for="filtro-tipo" class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1">Tipos de Prestamo</label>
-        <select id="filtro-tipo" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 rounded-xl text-sm focus:outline-none focus:border-[#7B1FA3] appearance-none cursor-pointer">
+        <select id="filtro-tipo" wire:model.live="filtroTipoPrestamo" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 rounded-xl text-sm focus:outline-none focus:border-[#7B1FA3] appearance-none cursor-pointer">
             <option value="Sin Filtro">Todos los tipos</option>
             <option value="prestamos por unidad">Prestamo por Unidad</option>
             <option value="prestamos por cantidad">Prestamo por Cantidad</option>
+        </select>
+    </div>
+    
+    <!-- Tipos de Devolucion -->
+    <div class="w-full md:w-64">
+        <label for="filtro-tipo" class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1">Tipos de Prestamo</label>
+        <select id="filtro-tipo" wire:model.live="filtroTipoDevolucion" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 rounded-xl text-sm focus:outline-none focus:border-[#7B1FA3] appearance-none cursor-pointer">
+            <option value="Sin Filtro">Todos los tipos</option>
+            <option value="retornable">Retornable</option>
+            <option value="consumible">Consumible</option>
         </select>
     </div>
 </div>

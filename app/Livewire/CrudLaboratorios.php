@@ -27,7 +27,7 @@ class CrudLaboratorios extends Component
     // Campos formulario
     public $idLaboratorio;
     public $nombreLaboratorio;
-    public $tipoLaboratorio;
+    public $tipoLaboratorio = '';
     public $cantidadComputadoras;
     
     // Modal formulario
@@ -104,6 +104,7 @@ class CrudLaboratorios extends Component
             'nombreLaboratorio.required' => 'El Nombre es obligatorio',
             'nombreLaboratorio.max' => 'El Nombre no puede exceder los 255 caracteres',
             'tipoLaboratorio.required' => 'El tipo de laboratorio es obligatorio',
+            'tipoLaboratorio.in' => 'El tipo de laboratorio seleccionado no es válido.',
             'cantidadComputadoras.required' => 'La cantidad de computadoras es obligatoria para este tipo de laboratorio',
             'cantidadComputadoras.min' => 'La Cantidad minima permitida es de 1',
         ];
@@ -187,7 +188,7 @@ class CrudLaboratorios extends Component
     {
         $this->idLaboratorio = null;
         $this->nombreLaboratorio = '';
-        $this->tipoLaboratorio = 'prestamos';
+        $this->tipoLaboratorio = '';
         $this->cantidadComputadoras = 1;
         $this->resetValidation();
     }

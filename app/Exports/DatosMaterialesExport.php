@@ -17,7 +17,7 @@ class DatosMaterialesExport implements FromCollection, WithEvents, WithTitle
     public function collection()
     {
         return collect([
-            ['nombre','descripcion','tipo']
+            ['nombre','descripcion','tipo_prestamo','tipo_devolucion']
         ]);
     }
 
@@ -48,18 +48,34 @@ class DatosMaterialesExport implements FromCollection, WithEvents, WithTitle
                     $hoja->getCell("C{$fila}")->setDataValidation($validarTipo);
 
                     $hoja->setCellValue("C{$fila}", 'prestamos por unidad');
+
+                    $validarDevolucion = new DataValidation();
+                    $validarDevolucion->setType(DataValidation::TYPE_LIST)
+                                ->setErrorStyle(DataValidation::STYLE_STOP) 
+                                ->setAllowBlank(false)
+                                ->setShowInputMessage(true)
+                                ->setShowErrorMessage(true) 
+                                ->setShowDropDown(true)
+                                ->setErrorTitle('Dato no válido')
+                                ->setError('Por favor, selecciona una opción de la lista.')
+                                ->setFormula1('"retornable,consumible"');
+
+                    $hoja->getCell("D{$fila}")->setDataValidation($validarDevolucion);
+
+                    $hoja->setCellValue("D{$fila}", 'retornable');
                 }
 
                 $hoja->getColumnDimension('A')->setWidth(40);
                 $hoja->getColumnDimension('B')->setWidth(60); 
                 $hoja->getColumnDimension('C')->setWidth(40);
+                $hoja->getColumnDimension('D')->setWidth(40);
                 
                 // 1. Configurar la protección
                 $proteccion = $hoja->getProtection();
                 $proteccion->setSheet(true); 
 
                 // 3. Desbloquear el rango de entrada de datos (A2:C1000)
-                $hoja->getStyle('A2:C1000')->getProtection()->setLocked(Protection::PROTECTION_UNPROTECTED);
+                $hoja->getStyle('A2:D1000')->getProtection()->setLocked(Protection::PROTECTION_UNPROTECTED);
             }
         ];
     }

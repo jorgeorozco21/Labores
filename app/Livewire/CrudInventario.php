@@ -29,7 +29,7 @@ class CrudInventario extends Component
 
      // Campos formulario
     public $idInventario;
-    public $idMaterial;
+    public $idMaterial = '';
     public $cantidadTotal;
 
     // Modal formulario
@@ -243,7 +243,7 @@ class CrudInventario extends Component
     public function limpiarCampos()
     {
         $this->idInventario = null;
-        $this->idMaterial = null;
+        $this->idMaterial = '';
         $this->cantidadTotal = 1;
         $this->resetValidation();
     }
@@ -362,7 +362,7 @@ class CrudInventario extends Component
         $this->cerrarCargaMasiva();
     }
 
-     // Cerrar modal carga masiva
+    // Cerrar modal carga masiva
     public function cerrarCargaMasiva()
     {
         $this->modalCargaMasiva = false;
@@ -376,6 +376,21 @@ class CrudInventario extends Component
             ->join("materiales as m","m.id","=","i.id_material")
             ->join("laboratorios as l","l.id","=","i.id_laboratorio")
             ->where("l.id_institucion","=",session("id_institucion"))
+            ->when($this->id, function ($query) {
+                $query->where('i.id_laboratorio', '=', $this->id); 
+            })
+            ->when($this->buscador, function ($query){
+                $palabras = array_filter(explode(' ',trim($this->buscador)));
+
+                $query->where(function ($queryBuscador) use ($palabras){
+                    foreach ($palabras as $palabra) {
+                        $queryBuscador->orWhere('m.nombre','ilike','%'.$palabra.'%');
+                    }
+                });
+            })
+            ->when($this->filtro && $this->filtro !== 'Sin Filtro', function($query) {
+                $query->where('i.id_laboratorio','=',$this->filtro);
+            })
             ->pluck('i.id')
             ->map(fn($id) => (string) $id) 
             ->toArray()

@@ -50,15 +50,6 @@
       "resources/js/Admin/borrado_masivo.js"
     ]
   },
-  "resources/js/Admin/buscador_materiales.js": {
-    "file": "assets/buscador_materiales-iqZE750a.js",
-    "name": "buscador_materiales",
-    "src": "resources/js/Admin/buscador_materiales.js",
-    "isEntry": true,
-    "imports": [
-      "resources/js/Admin/borrado_masivo.js"
-    ]
-  },
   "resources/js/Admin/buscador_usuarios.js": {
     "file": "assets/buscador_usuarios-B_ZFWKUZ.js",
     "name": "buscador_usuarios",
@@ -78,12 +69,6 @@
     "file": "assets/crud_inventario-CxANODCK.js",
     "name": "crud_inventario",
     "src": "resources/js/Admin/crud_inventario.js",
-    "isEntry": true
-  },
-  "resources/js/Admin/crud_materiales.js": {
-    "file": "assets/crud_materiales-DK1pqXwj.js",
-    "name": "crud_materiales",
-    "src": "resources/js/Admin/crud_materiales.js",
     "isEntry": true
   },
   "resources/js/Admin/crud_usuarios.js": {
