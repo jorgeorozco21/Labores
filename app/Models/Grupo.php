@@ -14,9 +14,7 @@ class Grupo extends Model
 
     protected $fillable = [
         "nombre",
-        "grado",
-        "grupo",
-        "turno",
+        "tipo_grupo",
         "id_institucion"
     ];
 

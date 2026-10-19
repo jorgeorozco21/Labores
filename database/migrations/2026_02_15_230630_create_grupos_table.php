@@ -14,9 +14,7 @@ return new class extends Migration
         Schema::create('grupos', function (Blueprint $table) {
             $table->id();
             $table->string("nombre");
-            $table->string("grado");
-            $table->string("grupo");
-            $table->string("turno");
+            $table->string("tipo_grupo");
             $table->unsignedBigInteger("id_institucion");
             $table->timestamps();
 

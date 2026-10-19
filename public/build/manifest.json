@@ -32,24 +32,6 @@
     "src": "resources/js/Admin/boton_modales.js",
     "isEntry": true
   },
-  "resources/js/Admin/buscador_grupos.js": {
-    "file": "assets/buscador_grupos-Dj_BKWiv.js",
-    "name": "buscador_grupos",
-    "src": "resources/js/Admin/buscador_grupos.js",
-    "isEntry": true,
-    "imports": [
-      "resources/js/Admin/borrado_masivo.js"
-    ]
-  },
-  "resources/js/Admin/buscador_inventario.js": {
-    "file": "assets/buscador_inventario-CIOegCTv.js",
-    "name": "buscador_inventario",
-    "src": "resources/js/Admin/buscador_inventario.js",
-    "isEntry": true,
-    "imports": [
-      "resources/js/Admin/borrado_masivo.js"
-    ]
-  },
   "resources/js/Admin/buscador_usuarios.js": {
     "file": "assets/buscador_usuarios-B_ZFWKUZ.js",
     "name": "buscador_usuarios",
@@ -58,18 +40,6 @@
     "imports": [
       "resources/js/Admin/borrado_masivo.js"
     ]
-  },
-  "resources/js/Admin/crud_grupos.js": {
-    "file": "assets/crud_grupos-DdzwNPfL.js",
-    "name": "crud_grupos",
-    "src": "resources/js/Admin/crud_grupos.js",
-    "isEntry": true
-  },
-  "resources/js/Admin/crud_inventario.js": {
-    "file": "assets/crud_inventario-CxANODCK.js",
-    "name": "crud_inventario",
-    "src": "resources/js/Admin/crud_inventario.js",
-    "isEntry": true
   },
   "resources/js/Admin/crud_usuarios.js": {
     "file": "assets/crud_usuarios-DFaTjXV-.js",

@@ -37,18 +37,15 @@ class InformacionGruposExport implements FromQuery, WithHeadings, WithMapping, S
             ->leftJoin('grupo_laboratorios as gl','gl.id_grupo','=','g.id')
             ->leftJoin('laboratorios as l','l.id','=','gl.id_laboratorio')
             ->select(
-                'g.grado',
-                'g.grupo',
                 'g.nombre',
-                'g.turno',
+                'g.tipo_grupo',
                 DB::raw("STRING_AGG(l.nombre::text, '\n- ') as lista_laboratorios")
             )
             ->where('g.id_institucion', '=', $this->idInstitucion)
-            ->groupBy('g.id', 'g.grado', 'g.grupo', 'g.nombre', 'g.turno')
-            ->orderBy('g.turno','asc')
-            ->orderBy('g.grado','asc')
-            ->orderBy('g.grupo','asc')
-            ->orderBy('g.nombre','asc');
+            ->groupBy('g.id', 'g.nombre', 'g.tipo_grupo')
+            ->orderBy('g.tipo_grupo','asc')
+            ->orderBy('g.nombre','asc')
+        ;
     }
 
     /**
@@ -57,10 +54,8 @@ class InformacionGruposExport implements FromQuery, WithHeadings, WithMapping, S
     public function headings(): array
     {
         return [
-            'Grado',
-            'Grupo',
             'Nombre del Grupo',
-            'Turno',
+            'Tipo Grupo',
             'Laboratorios'
         ];
     }
@@ -78,10 +73,8 @@ class InformacionGruposExport implements FromQuery, WithHeadings, WithMapping, S
         $this->mensajesModales[$numeroFilaActual] = "Laboratorios asignados a este grupo:\n" . $laboratorios;
 
         return [
-            $grupo->grado,
-            $grupo->grupo,
             $grupo->nombre,
-            $grupo->turno,
+            $grupo->tipo_grupo,
             'Ver laboratorios'
         ];
     }
@@ -94,7 +87,7 @@ class InformacionGruposExport implements FromQuery, WithHeadings, WithMapping, S
                 $highestRow = $sheet->getHighestRow(); 
                 
                 for ($row=2;$row<=$highestRow;$row++) {
-                    $cellCoordinate = 'E' . $row; 
+                    $cellCoordinate = 'C' . $row; 
                     
                     $sheet->getStyle($cellCoordinate)->getFont()->getColor()->setARGB('FF7B1FA3');
 

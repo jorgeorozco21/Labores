@@ -392,73 +392,8 @@ Route::middleware('check.login')->group(function (){
             return view('Admin.Laboratorios.index');
         });
 
-        Route::get('/admin/grupos/exportar-grupos', [GrupoController::class, 'exportarGrupos'])->name('admin.grupos.exportarGrupos');
-
-        Route::resource('/admin/grupos', GrupoController::class)->names('admin.grupos');
-
-        Route::get('/api/grupos/laboratorio', function (Illuminate\Http\Request $request){
-            $laboratorio = 
-                DB::table("grupo_laboratorios as gl")
-                ->join('laboratorios as l','l.id','=','gl.id_laboratorio')
-                ->select(
-                    'gl.id_laboratorio',
-                    "l.nombre"
-                )
-                ->where("gl.id_grupo","=",$request->id)
-                ->get()
-            ;
-
-            return response()->json($laboratorio);
-        });
-
-        Route::get('/api/grupos/editar', function (Illuminate\Http\Request $request){
-            $grupo = 
-                DB::table("grupos as g")
-                ->select(
-                    "g.id",
-                    "g.nombre",
-                    "g.grado",
-                    "g.grupo",
-                    "g.turno"
-                )
-                ->where("g.id","=",$request->id)
-                ->orderBy('g.turno','asc')
-                ->orderBy('g.grado','asc')
-                ->orderBy('g.grupo','asc')
-                ->orderBy('g.nombre','asc')
-                ->first()
-            ;
-
-            return response()->json($grupo);
-        });
-
-        Route::get('/api/grupos', function (Illuminate\Http\Request $request){
-            $query = 
-                DB::table("grupos as g")
-                ->select(
-                    "g.id",
-                    "g.nombre",
-                    "g.grado",
-                    "g.grupo",
-                    "g.turno"
-                )
-                ->where("g.id_institucion","=",session("id_institucion"))
-                ->where(function ($buscador) use ($request){
-                    $buscador->where("g.nombre","ilike","%".$request->texto."%")
-                    ->orwhere("g.grado","ilike","%".$request->texto."%")
-                    ->orwhere("g.grupo","ilike","%".$request->texto."%");
-                })
-            ;
-
-            if ($request->filtro != "Sin Filtro"){
-                $query->where("g.turno","=",$request->filtro);
-            }
-
-            $query->orderBy('g.turno','asc')->orderBy('g.grado','asc')->orderBy('g.grupo','asc')->orderBy('g.nombre','asc');
-
-            $grupos = $query->paginate(40);
-
-            return response()->json($grupos);
+        Route::get('/admin/grupos', function(){
+            return view('Admin.Grupos.index');
         });
 
         Route::get('/admin/materiales', function(){
